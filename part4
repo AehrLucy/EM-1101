@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Derivatives of Inverse Trigonometric Functions</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- KaTeX for Math Formatting -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        @media print {
+            .no-print { display: none !important; }
+            body { background-color: white; }
+            .shadow-card { box-shadow: none !important; border: 1px solid #cbd5e1 !important; }
+        }
+        .katex-display { margin: 0.5em 0 !important; }
+    </style>
+</head>
+<body class="min-h-screen pb-12">
+
+    <!-- Canvas Style Header -->
+    <header class="bg-[#2D3B45] text-white shadow-md no-print sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="bg-red-600 p-1.5 rounded text-white font-bold text-xs tracking-wider">EM 1101</div>
+                <h1 class="font-semibold text-lg sm:text-xl text-slate-100 truncate">Calculus I: Inverse Trig Derivatives</h1>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-4xl mx-auto px-4 py-8">
+
+        <!-- Meta Header Card -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-8 shadow-card">
+            <div class="flex flex-col md:flex-row justify-between md:items-center gap-4 pb-4 border-b border-slate-200">
+                <div>
+                    <div class="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 mb-2">
+                        Practice Worksheet
+                    </div>
+                    <h2 class="text-2xl font-bold text-slate-800">Derivatives of Inverse Trigonometric Functions</h2>
+                    <p class="text-slate-500 text-sm mt-1">Evaluates differentiation formulas, chain rule applications, product rule, and slope calculations involving inverse trigonometric functions.</p>
+                </div>
+                <div class="flex items-center gap-4 text-sm text-slate-600 bg-slate-50 p-3 rounded-lg border border-slate-200">
+                    <div class="text-center">
+                        <span class="block text-xs uppercase font-semibold text-slate-400">Questions</span>
+                        <span class="text-lg font-bold text-slate-700">10</span>
+                    </div>
+                    <div class="h-8 w-px bg-slate-300"></div>
+                    <div class="text-center">
+                        <span class="block text-xs uppercase font-semibold text-slate-400">Points</span>
+                        <span class="text-lg font-bold text-slate-700">100</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Score Results Banner -->
+        <div id="scoreBanner" class="hidden bg-emerald-50 border border-emerald-300 rounded-xl p-5 mb-8 text-emerald-900 no-print flex items-center justify-between shadow-sm">
+            <div class="flex items-center gap-3">
+                <div class="p-3 bg-emerald-500 text-white rounded-lg">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg">Quiz Complete!</h3>
+                    <p class="text-sm text-emerald-800">Your Score: <span id="userScore" class="font-extrabold text-lg">0</span> / 100 (<span id="userPercent">0%</span>)</p>
+                </div>
+            </div>
+            <button onclick="resetQuiz()" class="text-xs font-semibold uppercase tracking-wider bg-white border border-emerald-300 text-emerald-700 hover:bg-emerald-100 px-4 py-2 rounded-lg transition-all">
+                Reset Answers
+            </button>
+        </div>
+
+        <!-- Quiz Form -->
+        <form id="quizForm" class="space-y-6"></form>
+
+        <!-- Quiz Action Buttons -->
+        <div class="flex flex-wrap items-center justify-between gap-4 mt-8 no-print">
+            <button type="button" onclick="submitQuiz()" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold rounded-lg shadow-sm transition-colors flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <span>Submit & Grade Quiz</span>
+            </button>
+
+            <button type="button" onclick="toggleAnswerKey()" class="px-5 py-3 bg-slate-800 hover:bg-slate-900 text-white font-medium rounded-lg shadow-sm transition-colors flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
+                <span id="toggleKeyText">Toggle Answer Key & Explanations</span>
+            </button>
+        </div>
+
+        <!-- Answer Key & Solutions Section -->
+        <section id="answerKeySection" class="hidden mt-12 bg-white rounded-xl shadow-sm border border-slate-300 p-6 shadow-card">
+            <div class="flex items-center justify-between border-b border-slate-200 pb-4 mb-6">
+                <div>
+                    <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                        Answer Key & Complete Solutions
+                    </h3>
+                    <p class="text-slate-500 text-sm mt-0.5">Detailed step-by-step mathematical derivations for each problem.</p>
+                </div>
+                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-1 rounded-full">Inverse Trig Derivatives</span>
+            </div>
+
+            <div id="answerKeyList" class="space-y-6"></div>
+        </section>
+
+    </main>
+
+    <script>
+        const questionsData = [
+            {
+                id: 1,
+                question: "Find the derivative of $y = \\arcsin(3x)$.",
+                options: [
+                    { label: "A", text: "$\\frac{1}{\\sqrt{1 - 9x^2}}$" },
+                    { label: "B", text: "$\\frac{3}{\\sqrt{1 - 9x^2}}$" },
+                    { label: "C", text: "$\\frac{3}{1 + 9x^2}$" },
+                    { label: "D", text: "$-\\frac{3}{\\sqrt{1 - 9x^2}}$" }
+                ],
+                correct: "B",
+                explanation: "Using the chain rule $\\frac{d}{dx}[\\arcsin(u)] = \\frac{u'}{\\sqrt{1 - u^2}}$ with $u = 3x$ and $u' = 3$: $\\frac{dy}{dx} = \\frac{3}{\\sqrt{1 - (3x)^2}} = \\frac{3}{\\sqrt{1 - 9x^2}}$."
+            },
+            {
+                id: 2,
+                question: "Evaluate $\\frac{d}{dx}\\left[\\arctan(x^2)\\right]$.",
+                options: [
+                    { label: "A", text: "$\\frac{2x}{1 + x^4}$" },
+                    { label: "B", text: "$\\frac{1}{1 + x^4}$" },
+                    { label: "C", text: "$\\frac{2x}{\\sqrt{1 - x^4}}$" },
+                    { label: "D", text: "$\\frac{2x}{1 + x^2}$" }
+                ],
+                correct: "A",
+                explanation: "Apply chain rule $\\frac{d}{dx}[\\arctan(u)] = \\frac{u'}{1 + u^2}$ with $u = x^2$ and $u' = 2x$: $\\frac{dy}{dx} = \\frac{2x}{1 + (x^2)^2} = \\frac{2x}{1 + x^4}$."
+            },
+            {
+                id: 3,
+                question: "Evaluate the derivative of $f(x) = \\arccos(2x - 1)$ at $x = \\frac{1}{2}$.",
+                options: [
+                    { label: "A", text: "$-1$" },
+                    { label: "B", text: "$-2$" },
+                    { label: "C", text: "$2$" },
+                    { label: "D", text: "$\\text{Undefined}$" }
+                ],
+                correct: "B",
+                explanation: "Using $\\frac{d}{dx}[\\arccos(u)] = -\\frac{u'}{\\sqrt{1 - u^2}}$ with $u = 2x - 1$: $f'(x) = -\\frac{2}{\\sqrt{1 - (2x-1)^2}}$. At $x = \\frac{1}{2}$, $2x - 1 = 0 \\implies f'\\left(\\frac{1}{2}\\right) = -\\frac{2}{\\sqrt{1 - 0}} = -2$."
+            },
+            {
+                id: 4,
+                question: "Find $\\frac{dy}{dx}$ for $y = \\operatorname{arcsec}(e^x)$ for $x > 0$.",
+                options: [
+                    { label: "A", text: "$\\frac{1}{\\sqrt{e^{2x} - 1}}$" },
+                    { label: "B", text: "$\\frac{e^x}{\\sqrt{e^{2x} - 1}}$" },
+                    { label: "C", text: "$\\frac{1}{e^x\\sqrt{e^{2x} - 1}}$" },
+                    { label: "D", text: "$\\frac{1}{1 + e^{2x}}$" }
+                ],
+                correct: "A",
+                explanation: "Using $\\frac{d}{dx}[\\operatorname{arcsec}(u)] = \\frac{u'}{\vert{}u\vert{}\\sqrt{u^2 - 1}}$ with $u = e^x$ ($u > 0$): $\\frac{dy}{dx} = \\frac{e^x}{e^x\\sqrt{(e^x)^2 - 1}} = \\frac{1}{\\sqrt{e^{2x} - 1}}$."
+            },
+            {
+                id: 5,
+                question: "Find the derivative of $y = x \\cdot \\arcsin(x)$.",
+                options: [
+                    { label: "A", text: "$\\frac{x}{\\sqrt{1 - x^2}}$" },
+                    { label: "B", text: "$\\arcsin(x) + \\frac{x}{\\sqrt{1 - x^2}}$" },
+                    { label: "C", text: "$\\arcsin(x) - \\frac{x}{\\sqrt{1 - x^2}}$" },
+                    { label: "D", text: "$\\frac{1}{\\sqrt{1 - x^2}}$" }
+                ],
+                correct: "B",
+                explanation: "By Product Rule: $\\frac{dy}{dx} = (1)\\arcsin(x) + x\\cdot\\frac{1}{\\sqrt{1 - x^2}} = \\arcsin(x) + \\frac{x}{\\sqrt{1 - x^2}}$."
+            },
+            {
+                id: 6,
+                question: "Evaluate $\\frac{d}{dx}\\left[\\operatorname{arccot}\\left(\\frac{1}{x}\\right)\\right]$ for $x \\neq 0$.",
+                options: [
+                    { label: "A", text: "$-\\frac{1}{1 + x^2}$" },
+                    { label: "B", text: "$\\frac{1}{1 + x^2}$" },
+                    { label: "C", text: "$-\\frac{1}{x^2 + 1}$" },
+                    { label: "D", text: "$\\frac{1}{x^2\\sqrt{1 - x^2}}$" }
+                ],
+                correct: "B",
+                explanation: "Using $\\frac{d}{dx}[\\operatorname{arccot}(u)] = -\\frac{u'}{1 + u^2}$ with $u = \\frac{1}{x}$ and $u' = -\\frac{1}{x^2}$: $\\frac{dy}{dx} = -\\frac{-1/x^2}{1 + (1/x)^2} = \\frac{1/x^2}{(x^2 + 1)/x^2} = \\frac{1}{1 + x^2}$."
+            },
+            {
+                id: 7,
+                question: "Find $\\frac{dy}{dx}$ if $y = \\arcsin(\\cos x)$ for $x \\in (0, \\pi)$.",
+                options: [
+                    { label: "A", text: "$1$" },
+                    { label: "B", text: "$-1$" },
+                    { label: "C", text: "$\\tan x$" },
+                    { label: "D", text: "$-\\cot x$" }
+                ],
+                correct: "B",
+                explanation: "Using chain rule with $u = \\cos x$: $\\frac{dy}{dx} = \\frac{-\\sin x}{\\sqrt{1 - \\cos^2 x}} = \\frac{-\\sin x}{\\sqrt{\\sin^2 x}}$. Since $\\sin x > 0$ on $(0, \\pi)$, $\\frac{dy}{dx} = \\frac{-\\sin x}{\\sin x} = -1$."
+            },
+            {
+                id: 8,
+                question: "Evaluate $\\frac{d}{dx}\\left[\\arctan\\left(\\frac{x}{a}\\right)\\right]$ where $a > 0$ is a constant.",
+                options: [
+                    { label: "A", text: "$\\frac{a}{a^2 + x^2}$" },
+                    { label: "B", text: "$\\frac{1}{a^2 + x^2}$" },
+                    { label: "C", text: "$\\frac{a}{1 + x^2}$" },
+                    { label: "D", text: "$\\frac{1}{a(1 + x^2)}$" }
+                ],
+                correct: "A",
+                explanation: "Chain rule with $u = \\frac{x}{a}$: $\\frac{dy}{dx} = \\frac{1/a}{1 + (x/a)^2} = \\frac{1/a}{(a^2 + x^2)/a^2} = \\frac{a}{a^2 + x^2}$."
+            },
+            {
+                id: 9,
+                question: "Find $f'(x)$ if $f(x) = \\operatorname{arccsc}(x^3)$ for $x > 1$.",
+                options: [
+                    { label: "A", text: "$-\\frac{3}{x\\sqrt{x^6 - 1}}$" },
+                    { label: "B", text: "$-\\frac{3x^2}{\\sqrt{x^6 - 1}}$" },
+                    { label: "C", text: "$\\frac{3}{x\\sqrt{x^6 - 1}}$" },
+                    { label: "D", text: "$-\\frac{1}{x^3\\sqrt{x^6 - 1}}$" }
+                ],
+                correct: "A",
+                explanation: "Using $\\frac{d}{dx}[\\operatorname{arccsc}(u)] = -\\frac{u'}{\vert{}u\vert{}\\sqrt{u^2 - 1}}$ with $u = x^3$: $f'(x) = -\\frac{3x^2}{x^3\\sqrt{x^6 - 1}} = -\\frac{3}{x\\sqrt{x^6 - 1}}$."
+            },
+            {
+                id: 10,
+                question: "Find the slope of the tangent line to $y = \\arcsin\\left(\\frac{x}{2}\\right)$ at $x = 1$.",
+                options: [
+                    { label: "A", text: "$\\frac{1}{\\sqrt{3}}$" },
+                    { label: "B", text: "$\\frac{2}{\\sqrt{3}}$" },
+                    { label: "C", text: "$\\frac{1}{2\\sqrt{3}}$" },
+                    { label: "D", text: "$\\frac{\\sqrt{3}}{2}$" }
+                ],
+                correct: "A",
+                explanation: "Differentiating: $\\frac{dy}{dx} = \\frac{1/2}{\\sqrt{1 - x^2/4}} = \\frac{1}{\\sqrt{4 - x^2}}$. At $x = 1$, $\\frac{dy}{dx} = \\frac{1}{\\sqrt{4 - 1}} = \\frac{1}{\\sqrt{3}}$."
+            }
+        ];
+
+        function renderQuiz() {
+            const quizForm = document.getElementById('quizForm');
+            const answerKeyList = document.getElementById('answerKeyList');
+
+            quizForm.innerHTML = '';
+            answerKeyList.innerHTML = '';
+
+            questionsData.forEach((q, index) => {
+                const qCard = document.createElement('div');
+                qCard.className = 'bg-white rounded-xl shadow-sm border border-slate-200 p-6 shadow-card transition-all';
+                qCard.id = `qCard_${q.id}`;
+
+                let optionsHTML = '';
+                q.options.forEach(opt => {
+                    optionsHTML += `
+                        <label class="flex items-center gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors text-slate-700">
+                            <input type="radio" name="q_${q.id}" value="${opt.label}" class="w-4 h-4 text-blue-600 focus:ring-blue-500 border-slate-300">
+                            <span class="font-semibold text-sm text-slate-500 w-5">${opt.label})</span>
+                            <span class="text-base">${opt.text}</span>
+                        </label>
+                    `;
+                });
+
+                qCard.innerHTML = `
+                    <div class="flex items-start justify-between gap-4 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="px-2.5 py-1 bg-slate-100 text-slate-700 font-bold rounded-md text-sm">Q${index + 1}</span>
+                            <span class="text-xs font-semibold uppercase text-slate-400">10 Points</span>
+                        </div>
+                        <div id="badge_${q.id}" class="hidden"></div>
+                    </div>
+                    <div class="text-lg font-medium text-slate-800 mb-4">${q.question}</div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        ${optionsHTML}
+                    </div>
+                `;
+
+                quizForm.appendChild(qCard);
+
+                const keyItem = document.createElement('div');
+                keyItem.className = 'border-b border-slate-100 pb-5 last:border-b-0 last:pb-0';
+                keyItem.innerHTML = `
+                    <div class="flex items-start gap-3">
+                        <span class="flex-shrink-0 w-7 h-7 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-xs">${q.id}</span>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="font-semibold text-slate-800">Question ${q.id}</span>
+                                <span class="text-sm font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">Correct: ${q.correct}</span>
+                            </div>
+                            <p class="text-slate-600 text-sm mb-2 font-medium">${q.question}</p>
+                            <div class="bg-slate-50 border-l-4 border-blue-500 p-3 rounded text-sm text-slate-700">
+                                <span class="font-semibold text-blue-900 block mb-1">Step-by-step Solution:</span>
+                                ${q.explanation}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                answerKeyList.appendChild(keyItem);
+            });
+
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: "$$", right: "$$", display: true},
+                        {left: "$", right: "$", display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+
+        function submitQuiz() {
+            let score = 0;
+            const total = questionsData.length;
+
+            questionsData.forEach(q => {
+                const selected = document.querySelector(`input[name="q_${q.id}"]:checked`);
+                const card = document.getElementById(`qCard_${q.id}`);
+                const badge = document.getElementById(`badge_${q.id}`);
+
+                badge.classList.remove('hidden');
+
+                if (selected && selected.value === q.correct) {
+                    score++;
+                    card.className = "bg-white rounded-xl shadow-sm border-2 border-emerald-400 p-6 shadow-card bg-emerald-50/20";
+                    badge.innerHTML = `<span class="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 bg-emerald-100 border border-emerald-300 px-2.5 py-1 rounded-full">✓ Correct</span>`;
+                } else {
+                    card.className = "bg-white rounded-xl shadow-sm border-2 border-rose-300 p-6 shadow-card bg-rose-50/20";
+                    const chosenText = selected ? selected.value : "None";
+                    badge.innerHTML = `<span class="inline-flex items-center gap-1 text-xs font-bold text-rose-700 bg-rose-100 border border-rose-300 px-2.5 py-1 rounded-full">✕ Incorrect (Selected: ${chosenText})</span>`;
+                }
+            });
+
+            const scoreBanner = document.getElementById('scoreBanner');
+            document.getElementById('userScore').innerText = score * 10;
+            document.getElementById('userPercent').innerText = `${Math.round((score / total) * 100)}%`;
+            scoreBanner.classList.remove('hidden');
+            scoreBanner.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function resetQuiz() {
+            document.getElementById('quizForm').reset();
+            document.getElementById('scoreBanner').classList.add('hidden');
+            
+            questionsData.forEach(q => {
+                const card = document.getElementById(`qCard_${q.id}`);
+                const badge = document.getElementById(`badge_${q.id}`);
+                card.className = "bg-white rounded-xl shadow-sm border border-slate-200 p-6 shadow-card transition-all";
+                badge.classList.add('hidden');
+            });
+        }
+
+        function toggleAnswerKey() {
+            const keySection = document.getElementById('answerKeySection');
+            const isHidden = keySection.classList.contains('hidden');
+            if (isHidden) {
+                keySection.classList.remove('hidden');
+                keySection.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                keySection.classList.add('hidden');
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderQuiz();
+        });
+    </script>
+</body>
+</html>
