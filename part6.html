@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculus I Departmental Exam Review</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- KaTeX for Math Formatting -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        @media print {
+            .no-print { display: none !important; }
+            body { background-color: white; }
+            .shadow-card { box-shadow: none !important; border: 1px solid #cbd5e1 !important; }
+        }
+        .katex-display { margin: 0.5em 0 !important; }
+    </style>
+</head>
+<body class="min-h-screen pb-12">
+
+    <!-- Canvas Style Header -->
+    <header class="bg-[#2D3B45] text-white shadow-md no-print sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="bg-red-600 p-1.5 rounded text-white font-bold text-xs tracking-wider">EM 1101</div>
+                <h1 class="font-semibold text-lg sm:text-xl text-slate-100 truncate">Calculus I: Midterm Coverage Topics:)</h1>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-4xl mx-auto px-4 py-8">
+
+        <!-- Meta Header Card -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-8 shadow-card">
+            <div class="flex flex-col md:flex-row justify-between md:items-center gap-4 pb-4 border-b border-slate-200">
+                <div>
+                    <div class="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 mb-2">
+                        Departmental Exams
+                    </div>
+                    <h2 class="text-2xl font-bold text-slate-800">Calculus 1 Collection of Exam Problems for Midterm</h2>
+                    <p class="text-slate-500 text-sm mt-1">Complete collection covering limits at infinity, continuity, word problems, derivatives, inverse trig, and tangent/normal lines.</p>
+                </div>
+                <div class="flex items-center gap-4 text-sm text-slate-600 bg-slate-50 p-3 rounded-lg border border-slate-200">
+                    <div class="text-center">
+                        <span class="block text-xs uppercase font-semibold text-slate-400">Questions</span>
+                        <span class="text-lg font-bold text-slate-700">27</span>
+                    </div>
+                    <div class="h-8 w-px bg-slate-300"></div>
+                    <div class="text-center">
+                        <span class="block text-xs uppercase font-semibold text-slate-400">Points</span>
+                        <span class="text-lg font-bold text-slate-700">270</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Score Results Banner -->
+        <div id="scoreBanner" class="hidden bg-emerald-50 border border-emerald-300 rounded-xl p-5 mb-8 text-emerald-900 no-print flex items-center justify-between shadow-sm">
+            <div class="flex items-center gap-3">
+                <div class="p-3 bg-emerald-500 text-white rounded-lg">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg">Quiz Complete!</h3>
+                    <p class="text-sm text-emerald-800">Your Score: <span id="userScore" class="font-extrabold text-lg">0</span> / 270 (<span id="userPercent">0%</span>)</p>
+                </div>
+            </div>
+            <button onclick="resetQuiz()" class="text-xs font-semibold uppercase tracking-wider bg-white border border-emerald-300 text-emerald-700 hover:bg-emerald-100 px-4 py-2 rounded-lg transition-all">
+                Reset Answers
+            </button>
+        </div>
+
+        <!-- Quiz Form -->
+        <form id="quizForm" class="space-y-6"></form>
+
+        <!-- Quiz Action Buttons -->
+        <div class="flex flex-wrap items-center justify-between gap-4 mt-8 no-print">
+            <button type="button" onclick="submitQuiz()" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold rounded-lg shadow-sm transition-colors flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <span>Submit & Grade Quiz</span>
+            </button>
+
+            <button type="button" onclick="toggleAnswerKey()" class="px-5 py-3 bg-slate-800 hover:bg-slate-900 text-white font-medium rounded-lg shadow-sm transition-colors flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
+                <span id="toggleKeyText">Toggle Answer Key & Explanations</span>
+            </button>
+        </div>
+
+        <!-- Answer Key & Solutions Section -->
+        <section id="answerKeySection" class="hidden mt-12 bg-white rounded-xl shadow-sm border border-slate-300 p-6 shadow-card">
+            <div class="flex items-center justify-between border-b border-slate-200 pb-4 mb-6">
+                <div>
+                    <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                        Answer Key & Complete Solutions
+                    </h3>
+                    <p class="text-slate-500 text-sm mt-0.5">Detailed step-by-step solutions matching the departmental exam keys.</p>
+                </div>
+                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-1 rounded-full">Departmental Collection</span>
+            </div>
+
+            <div id="answerKeyList" class="space-y-6"></div>
+        </section>
+
+    </main>
+
+    <script>
+        const questionsData = [
+            {
+                id: 1,
+                question: "Evaluate the difference quotient $\\frac{f(x)-f(a)}{x-a}$ given the function $f(x) = \\frac{1}{x}$.",
+                options: [
+                    { label: "A", text: "$\\frac{1}{ax}$" },
+                    { label: "B", text: "$\\frac{a-x}{ax}$" },
+                    { label: "C", text: "$-\\frac{1}{ax}$" },
+                    { label: "D", text: "$-\\frac{1}{a^2}$" }
+                ],
+                correct: "C",
+                explanation: "$\\frac{f(x)-f(a)}{x-a} = \\frac{\\frac{1}{x} - \\frac{1}{a}}{x-a} = \\frac{\\frac{a-x}{ax}}{x-a} = \\frac{-(x-a)}{ax(x-a)} = -\\frac{1}{ax}$."
+            },
+            {
+                id: 2,
+                question: "Find the equations of the tangent line and normal line to the curve $y = 3x^2 - x^3$ at $(1, 2)$.",
+                options: [
+                    { label: "A", text: "Tangent: $y = 3x + 1$, Normal: $y = \\frac{x - 7}{3}$" },
+                    { label: "B", text: "Tangent: $y = 3x - 1$, Normal: $y = \\frac{-x + 7}{3}$" },
+                    { label: "C", text: "Tangent: $y = 6x - 4$, Normal: $y = -\\frac{1}{6}x + \\frac{13}{6}$" },
+                    { label: "D", text: "Tangent: $y = 3x - 1$, Normal: $y = -3x + 5$" }
+                ],
+                correct: "B",
+                explanation: "$\\frac{dy}{dx} = 6x - 3x^2$. At $(1,2)$, slope $m_t = 6(1) - 3(1)^2 = 3$.<br>Tangent line: $y - 2 = 3(x - 1) \\implies y = 3x - 1$.<br>Normal slope $m_n = -\\frac{1}{3}$. Normal line: $y - 2 = -\\frac{1}{3}(x - 1) \\implies x + 3y - 7 = 0 \\implies y = \\frac{-x + 7}{3}$."
+            },
+            {
+                id: 3,
+                question: "Find $f'(x)$ if $f(x) = \\sqrt[3]{x} - \\frac{1}{\\sqrt{x}}$.",
+                options: [
+                    { label: "A", text: "$\\frac{1}{3\\sqrt[3]{x^2}} - \\frac{1}{2\\sqrt{x^3}}$" },
+                    { label: "B", text: "$\\frac{1}{3}x^{-2/3} - \\frac{1}{2}x^{-3/2}$" },
+                    { label: "C", text: "$\\frac{1}{\\sqrt[3]{x^2}} + \\frac{1}{\\sqrt{x^3}}$" },
+                    { label: "D", text: "$\\frac{1}{3\\sqrt[3]{x^2}} + \\frac{1}{2\\sqrt{x^3}}$" }
+                ],
+                correct: "D",
+                explanation: "Rewrite $f(x) = x^{1/3} - x^{-1/2}$. Differentiating: $f'(x) = \\frac{1}{3}x^{-2/3} - \\left(-\\frac{1}{2}\\right)x^{-3/2} = \\frac{1}{3\\sqrt[3]{x^2}} + \\frac{1}{2\\sqrt{x^3}}$."
+            },
+            {
+                id: 4,
+                question: "Find the derivative of $f(\\theta) = \\frac{\\sec\\theta}{1 + \\sec\\theta}$.",
+                options: [
+                    { label: "A", text: "$\\frac{\\sec\\theta \\tan\\theta}{(1 + \\sec\\theta)^2}$" },
+                    { label: "B", text: "$\\frac{\\sec^2\\theta \\tan\\theta}{(1 + \\sec\\theta)^2}$" },
+                    { label: "C", text: "$\\frac{\\tan\\theta}{1 + \\sec\\theta}$" },
+                    { label: "D", text: "$-\\frac{\\sec\\theta \\tan\\theta}{(1 + \\sec\\theta)^2}$" }
+                ],
+                correct: "A",
+                explanation: "Quotient Rule: $f'(\\theta) = \\frac{(1+\\sec\\theta)\\sec\\theta\\tan\\theta - \\sec\\theta(\\sec\\theta\\tan\\theta)}{(1+\\sec\\theta)^2} = \\frac{\\sec\\theta\\tan\\theta + \\sec^2\\theta\\tan\\theta - \\sec^2\\theta\\tan\\theta}{(1+\\sec\\theta)^2} = \\frac{\\sec\\theta\\tan\\theta}{(1+\\sec\\theta)^2}$."
+            },
+            {
+                id: 5,
+                question: "Differentiate the function $y = x \\sin\\left(\\frac{1}{x}\\right)$.",
+                options: [
+                    { label: "A", text: "$\\cos\\left(\\frac{1}{x}\\right)$" },
+                    { label: "B", text: "$\\sin\\left(\\frac{1}{x}\\right) + \\frac{1}{x}\\cos\\left(\\frac{1}{x}\\right)$" },
+                    { label: "C", text: "$\\sin\\left(\\frac{1}{x}\\right) - \\frac{1}{x}\\cos\\left(\\frac{1}{x}\\right)$" },
+                    { label: "D", text: "$-\\frac{1}{x}\\cos\\left(\\frac{1}{x}\\right)$" }
+                ],
+                correct: "C",
+                explanation: "Product & Chain Rule: $\\frac{dy}{dx} = x \\cdot \\frac{d}{dx}\\left[\\sin\\left(\\frac{1}{x}\\right)\\right] + \\sin\\left(\\frac{1}{x}\\right)\\cdot\\frac{d}{dx}[x] = x\\left(\\cos\\left(\\frac{1}{x}\\right)\\cdot\\left(-\\frac{1}{x^2}\\right)\\right) + \\sin\\left(\\frac{1}{x}\\right) = \\sin\\left(\\frac{1}{x}\\right) - \\frac{1}{x}\\cos\\left(\\frac{1}{x}\\right)$."
+            },
+            {
+                id: 6,
+                question: "If $f$ and $g$ are continuous functions with $f(7) = 10$ and $\\lim_{x \\to 7} [2f(x) - g(x)] = 7$, find $g(7)$.",
+                options: [
+                    { label: "A", text: "$3$" },
+                    { label: "B", text: "$17$" },
+                    { label: "C", text: "$27$" },
+                    { label: "D", text: "$13$" }
+                ],
+                correct: "D",
+                explanation: "By continuity, $\\lim_{x \\to 7}[2f(x) - g(x)] = 2f(7) - g(7) = 7$. Substitute $f(7) = 10$: $2(10) - g(7) = 7 \\implies 20 - g(7) = 7 \\implies g(7) = 13$."
+            },
+            {
+                id: 7,
+                question: "Find the values of the constants $k$ and $p$ that make $f(x)$ continuous everywhere:<br>$$f(x) = \\begin{cases} x + 2 & \\text{if } x < 2 \\\\ kx^2 - px + 3 & \\text{if } 2 \\le x < 3 \\\\ 2x - k + p & \\text{if } x \\ge 3 \\end{cases}$$",
+                options: [
+                    { label: "A", text: "$k = 1, \\, p = 1$" },
+                    { label: "B", text: "$k = \\frac{1}{2}, \\, p = \\frac{1}{2}$" },
+                    { label: "C", text: "$k = \\frac{1}{2}, \\, p = 1$" },
+                    { label: "D", text: "$k = 2, \\, p = \\frac{1}{2}$" }
+                ],
+                correct: "B",
+                explanation: "Equating pieces at $x = 2$: $2 + 2 = k(2)^2 - p(2) + 3 \\implies 4k - 2p = 1$ (eq. 1).<br>Equating pieces at $x = 3$: $k(3)^2 - p(3) + 3 = 2(3) - k + p \\implies 10k - 4p = 3$ (eq. 2).<br>Solving system: $-2(4k - 2p = 1) \\implies -8k + 4p = -2$. Adding to eq. 2 gives $2k = 1 \\implies k = 1/2$. Substituting $k$ gives $p = 1/2$."
+            },
+            {
+                id: 8,
+                question: "Find the vertical asymptotes of the function $f(x) = \\frac{x^2 + 1}{4x - x^2}$.",
+                options: [
+                    { label: "A", text: "$x = 0$ and $x = 4$" },
+                    { label: "B", text: "$x = 2$ and $x = -2$" },
+                    { label: "C", text: "$x = 4$ only" },
+                    { label: "D", text: "$x = 0$ only" }
+                ],
+                correct: "A",
+                explanation: "Vertical asymptotes occur where denominator equals zero: $4x - x^2 = 0 \\implies x(4 - x) = 0 \\implies x = 0$ and $x = 4$."
+            },
+            {
+                id: 9,
+                question: "Given $f(x) = x + \\frac{1}{x}$ and $g(x) = \\frac{x + 1}{x + 2}$, find $(f \\circ g)(x)$ and $(g \\circ f)(x)$.",
+                options: [
+                    { label: "A", text: "$(f \\circ g)(x) = \\frac{x^2 + 3x + 2}{2x^2 + 6x + 5}, \\quad (g \\circ f)(x) = \\frac{x^2 + 2x + 1}{x^2 + x + 1}$" },
+                    { label: "B", text: "$(f \\circ g)(x) = \\frac{2x^2 + 5}{x^2 + 2}, \\quad (g \\circ f)(x) = \\frac{x^2 + 1}{x^2 + 2}$" },
+                    { label: "C", text: "$(f \\circ g)(x) = \\frac{2x^2 + 6x + 5}{x^2 + 3x + 2}, \\quad (g \\circ f)(x) = \\frac{x^2 + x + 1}{x^2 + 2x + 1}$" },
+                    { label: "D", text: "$(f \\circ g)(x) = \\frac{2x^2 + 6x + 5}{(x+2)(x+1)}, \\quad (g \\circ f)(x) = \\frac{x^2 + x + 1}{x + 2}$" }
+                ],
+                correct: "C",
+                explanation: "1) $(f \\circ g)(x) = \\frac{x+1}{x+2} + \\frac{x+2}{x+1} = \\frac{(x+1)^2 + (x+2)^2}{(x+2)(x+1)} = \\frac{2x^2 + 6x + 5}{x^2 + 3x + 2}$.<br>2) $(g \\circ f)(x) = \\frac{\\left(x + 1/x\\right) + 1}{\\left(x + 1/x\\right) + 2} = \\frac{\\frac{x^2 + x + 1}{x}}{\\frac{x^2 + 2x + 1}{x}} = \\frac{x^2 + x + 1}{x^2 + 2x + 1} = \\frac{x^2 + x + 1}{(x+1)^2}$."
+            },
+            {
+                id: 10,
+                question: "Evaluate $\\lim_{x \\to 3^-} \\left(\\frac{x^2 - 4x + 3}{x^2 - 5x + 6}\\right)$.",
+                options: [
+                    { label: "A", text: "$1$" },
+                    { label: "B", text: "$-2$" },
+                    { label: "C", text: "$2$" },
+                    { label: "D", text: "$\\text{DNE}$" }
+                ],
+                correct: "C",
+                explanation: "Factor numerator and denominator: $\\frac{(x-3)(x-1)}{(x-3)(x-2)} = \\frac{x-1}{x-2}$. Evaluating at $x = 3$: $\\frac{3-1}{3-2} = \\frac{2}{1} = 2$."
+            },
+            {
+                id: 11,
+                question: "Find $\\frac{dy}{dx}$ for $y = (x^2 + 4)^3(x^2 - 3)^5$.",
+                options: [
+                    { label: "A", text: "$6x(x^2 + 4)^2(x^2 - 3)^4$" },
+                    { label: "B", text: "$6x(x^2 - 3)^5(x^2 + 4)^2 + 10x(x^2 - 3)^4(x^2 + 4)^3$" },
+                    { label: "C", text: "$30x(x^2 + 4)^2(x^2 - 3)^4$" },
+                    { label: "D", text: "$6x(x^2 - 3)^5 + 10x(x^2 + 4)^3$" }
+                ],
+                correct: "B",
+                explanation: "Product & Chain Rule: $\\frac{dy}{dx} = (x^2-3)^5 \\cdot 3(x^2+4)^2(2x) + (x^2+4)^3 \\cdot 5(x^2-3)^4(2x) = 6x(x^2-3)^5(x^2+4)^2 + 10x(x^2-3)^4(x^2+4)^3$."
+            },
+            {
+                id: 12,
+                question: "Evaluate $\\frac{dy}{dx}$ at $x = 1$ for $f(x) = (3 + 4x^2)^3 - 2x^4$.",
+                options: [
+                    { label: "A", text: "$1176$" },
+                    { label: "B", text: "$384$" },
+                    { label: "C", text: "$1168$" },
+                    { label: "D", text: "$568$" }
+                ],
+                correct: "C",
+                explanation: "$f'(x) = 3(3 + 4x^2)^2(8x) - 8x^3 = 24x(3 + 4x^2)^2 - 8x^3$.<br>Expanding gives $f'(x) = 384x^5 + 568x^3 + 216x$.<br>At $x = 1$: $f'(1) = 384(1)^5 + 568(1)^3 + 216(1) = 1168$."
+            },
+            {
+                id: 13,
+                question: "Find the value of $\\frac{dy}{dx}$ if $y = \\operatorname{arcsec}(3x)$.",
+                options: [
+                    { label: "A", text: "$\\frac{3}{x\\sqrt{9x^2 - 1}}$" },
+                    { label: "B", text: "$\\frac{1}{\\sqrt{9x^2 - 1}}$" },
+                    { label: "C", text: "$\\frac{1}{x\\sqrt{9x^2 - 1}}$" },
+                    { label: "D", text: "$\\frac{3}{1 + 9x^2}$" }
+                ],
+                correct: "C",
+                explanation: "Chain Rule: $\\frac{d}{dx}[\\operatorname{arcsec}(u)] = \\frac{u'}{|u|\\sqrt{u^2-1}}$. For $u = 3x$: $\\frac{dy}{dx} = \\frac{3}{\\sqrt{(3x)^2}\\sqrt{(3x)^2 - 1}} = \\frac{3}{3x\\sqrt{9x^2 - 1}} = \\frac{1}{x\\sqrt{9x^2 - 1}}$."
+            },
+            {
+                id: 14,
+                question: "Find $\\frac{dy}{dx}$ of $y = \\sin\\left(x + \\cos\\sqrt{x}\\right)$.",
+                options: [
+                    { label: "A", text: "$\\cos\\left[x + \\cos\\sqrt{x}\\right]\\left[1 - \\frac{\\sin\\sqrt{x}}{2\\sqrt{x}}\\right]$" },
+                    { label: "B", text: "$\\cos\\left[x + \\cos\\sqrt{x}\\right]\\left[1 + \\frac{\\sin\\sqrt{x}}{2\\sqrt{x}}\\right]$" },
+                    { label: "C", text: "$-\\cos\\left[x + \\cos\\sqrt{x}\\right]\\left[1 - \\frac{\\sin\\sqrt{x}}{2\\sqrt{x}}\\right]$" },
+                    { label: "D", text: "$\\cos\\left[x + \\cos\\sqrt{x}\\right]\\left[1 - \\sin\\sqrt{x}\\right]$" }
+                ],
+                correct: "A",
+                explanation: "Chain Rule with $u = x + \\cos\\sqrt{x}$: $\\frac{du}{dx} = 1 - \\sin\\sqrt{x}\\cdot\\frac{1}{2\\sqrt{x}} = 1 - \\frac{\\sin\\sqrt{x}}{2\\sqrt{x}}$. Thus, $\\frac{dy}{dx} = \\cos\\left(x + \\cos\\sqrt{x}\\right)\\left(1 - \\frac{\\sin\\sqrt{x}}{2\\sqrt{x}}\\right)$."
+            },
+            {
+                id: 15,
+                question: "Evaluate: (a) $\\lim_{x \\to \\infty} \\frac{\\sqrt{x} + x^2}{2x - x^2}$ and (b) $\\lim_{x \\to \\infty} \\frac{1 - x - x^2}{2x^2 - 7}$.",
+                options: [
+                    { label: "A", text: "(a) $1$, (b) $\\frac{1}{2}$" },
+                    { label: "B", text: "(a) $\\infty$, (b) $-1$" },
+                    { label: "C", text: "(a) $-1$, (b) $-\\frac{1}{2}$" },
+                    { label: "D", text: "(a) $-1$, (b) $-1$" }
+                ],
+                correct: "C",
+                explanation: "For (a): $\\lim_{x \\to \\infty} \\frac{\\sqrt{x} + x^2}{2x - x^2} = \\lim_{x \\to \\infty} \\frac{\\frac{1}{x^{3/2}} + 1}{\\frac{2}{x} - 1} = \\frac{0 + 1}{0 - 1} = -1$.<br>For (b): $\\lim_{x \\to \\infty} \\frac{1 - x - x^2}{2x^2 - 7} = \\lim_{x \\to \\infty} \\frac{\\frac{1}{x^2} - \\frac{1}{x} - 1}{2 - \\frac{7}{x^2}} = \\frac{-1}{2} = -\\frac{1}{2}$."
+            },
+            {
+                id: 16,
+                question: "Evaluate $\\lim_{x \\to -\\infty} \\frac{3^x - 3^{-x}}{3^x + 3^{-x}}$.",
+                options: [
+                    { label: "A", text: "$1$" },
+                    { label: "B", text: "$0$" },
+                    { label: "C", text: "$\\infty$" },
+                    { label: "D", text: "$-1$" }
+                ],
+                correct: "D",
+                explanation: "As $x \\to -\\infty$, $3^x \\to 0$ and $3^{-x} \\to \\infty$. Multiply numerator and denominator by $3^x$: $\\lim_{x \\to -\\infty} \\frac{3^{2x} - 1}{3^{2x} + 1} = \\frac{3^{-\\infty} - 1}{3^{-\\infty} + 1} = \\frac{0 - 1}{0 + 1} = -1$."
+            },
+            {
+                id: 17,
+                question: "Given $f(x) = \\sqrt{5x} + 5\\sqrt{x}$, obtain $f'(x)$.",
+                options: [
+                    { label: "A", text: "$\\frac{5(1 + \\sqrt{5})}{\\sqrt{5x}}$" },
+                    { label: "B", text: "$\\frac{5 + 5\\sqrt{5}}{(5x)^{1/2}}$" },
+                    { label: "C", text: "$\\frac{5}{\\sqrt{5x}}$" },
+                    { label: "D", text: "Both A and B are correct equivalent forms" }
+                ],
+                correct: "D",
+                explanation: "$y = (5x)^{1/2} + 5(x)^{1/2} \\implies y' = \\frac{1}{2}(5x)^{-1/2}(5) + 5\\left(\\frac{1}{2}\\right)x^{-1/2} = \\frac{5}{2(5x)^{1/2}} + \\frac{5}{2x^{1/2}} = \\frac{5 + 5\\sqrt{5}}{\\sqrt{5x}}$."
+            },
+            {
+                id: 18,
+                question: "If $y = (\\tan\\tan 3\\theta)(\\cos\\cos 3\\theta) - \\sqrt{1 - \\cos^2 3\\theta} + (3\\theta)(\\sin\\sin 3\\theta)$, find $y'$.",
+                options: [
+                    { label: "A", text: "$-3\\theta \\cot\\cot 3\\theta$" },
+                    { label: "B", text: "$-3\\theta \\csc\\csc 3\\theta \\cot\\cot 3\\theta$" },
+                    { label: "C", text: "$3\\theta \\csc\\csc 3\\theta$" },
+                    { label: "D", text: "$-3\\csc\\csc 3\\theta$" }
+                ],
+                correct: "B",
+                explanation: "Using trigonometric identity $y = (\\sin\\sin 3\\theta) - \\sin\\sin 3\\theta + \\frac{1}{\\sin\\sin 3\\theta} = \\csc\\csc 3\\theta$.<br>Differentiating gives $y' = -\\csc(\\sin 3\\theta)\\cot(\\sin 3\\theta)\\cdot 3\\cos 3\\theta = -3\\theta \\csc\\csc 3\\theta \\cot\\cot 3\\theta$."
+            },
+            {
+                id: 19,
+                question: "Find the equations of the tangent and normal lines to $y = x^3 - 2x^2 + 4$ at $(2, 4)$.",
+                options: [
+                    { label: "A", text: "Tangent: $y = 4x + 4$, Normal: $y = -4x + 12$" },
+                    { label: "B", text: "Tangent: $y = 3x - 2$, Normal: $y = -\\frac{1}{3}x + \\frac{14}{3}$" },
+                    { label: "C", text: "Tangent: $y = 4x - 4$, Normal: $4y = -x + 18$" },
+                    { label: "D", text: "Tangent: $y = 4x - 4$, Normal: $y = -4x + 12$" }
+                ],
+                correct: "C",
+                explanation: "$\\frac{dy}{dx} = 3x^2 - 4x$. At $P(2,4)$, slope $m = 3(2)^2 - 4(2) = 4$.<br>Tangent line: $y - 4 = 4(x - 2) \\implies y = 4x - 4$.<br>Normal line: $y - 4 = -\\frac{1}{4}(x - 2) \\implies 4y - 16 = -x + 2 \\implies 4y = -x + 18 \\text{ or } y = -\\frac{x}{4} + \\frac{9}{2}$."
+            },
+            {
+                id: 20,
+                question: "A wire 24 inches long is to be cut into four pieces to form a rectangle whose shortest side has a length of $x$. Write the area $A$ of the rectangle as a function of $x$.",
+                options: [
+                    { label: "A", text: "$A(x) = 24x - x^2$" },
+                    { label: "B", text: "$A(x) = 12x - x^2$" },
+                    { label: "C", text: "$A(x) = 12x - 2x^2$" },
+                    { label: "D", text: "$A(x) = 6x - x^2$" }
+                ],
+                correct: "B",
+                explanation: "Perimeter $P = 24 = 2x + 2y \\implies x + y = 12 \\implies y = 12 - x$.<br>Area $A = xy = x(12 - x) = 12x - x^2$."
+            },
+            {
+                id: 21,
+                question: "Evaluate $\\lim_{x \\to \\infty} \\frac{6x^2 + 2x + 1}{6x^2 - 3x + 4}$.",
+                options: [
+                    { label: "A", text: "$0$" },
+                    { label: "B", text: "$2$" },
+                    { label: "C", text: "$\\infty$" },
+                    { label: "D", text: "$1$" }
+                ],
+                correct: "D",
+                explanation: "Divide numerator and denominator by $x^2$: $\\lim_{x \\to \\infty} \\frac{6 + \\frac{2}{x} + \\frac{1}{x^2}}{6 - \\frac{3}{x} + \\frac{4}{x^2}} = \\frac{6 + 0 + 0}{6 - 0 + 0} = 1$."
+            },
+            {
+                id: 22,
+                question: "Evaluate the first derivative of the function $f(y) = \\frac{y^5 - 5y^3 + 2y}{y^3}$.",
+                options: [
+                    { label: "A", text: "$f'(y) = 2y - \\frac{4}{y^3}$" },
+                    { label: "B", text: "$f'(y) = \\frac{2y - 4}{y^3}$" },
+                    { label: "C", text: "$f'(y) = 2y + \\frac{4}{y^3}$" },
+                    { label: "D", text: "$f'(y) = 2y - \\frac{4}{y^6}$" }
+                ],
+                correct: "A",
+                explanation: "Simplify algebraic expression: $f(y) = y^2 - 5 + 2y^{-2}$.<br>Differentiating: $f'(y) = 2y + 0 - 4y^{-3} = 2y - \\frac{4}{y^3}$."
+            },
+            {
+                id: 23,
+                question: "Evaluate the first derivative of $f(x) = 10\\sqrt[5]{x^3} - \\sqrt{x^7} + 6\\sqrt[3]{x^8} - 3$.",
+                options: [
+                    { label: "A", text: "$f'(x) = 6x^{-2/5} - \\frac{7}{2}x^{5/2} + 16x^{5/3}$" },
+                    { label: "B", text: "$f'(x) = \\frac{6}{\\sqrt[5]{x^2}} - \\frac{7\\sqrt{x^5}}{2} + 16\\sqrt[3]{x^5}$" },
+                    { label: "C", text: "Both A and B are equivalent correct forms" },
+                    { label: "D", text: "$f'(x) = 6\\sqrt[5]{x^2} - \\frac{7\\sqrt{x^5}}{2} + 16\\sqrt[3]{x^5}$" }
+                ],
+                correct: "C",
+                explanation: "Rewrite as power exponents: $f(x) = 10x^{3/5} - x^{7/2} + 6x^{8/3} - 3$.<br>$f'(x) = 10\\left(\\frac{3}{5}\\right)x^{-2/5} - \\frac{7}{2}x^{5/2} + 6\\left(\\frac{8}{3}\\right)x^{5/3} = 6x^{-2/5} - \\frac{7}{2}x^{5/2} + 16x^{5/3} = \\frac{6}{\\sqrt[5]{x^2}} - \\frac{7\\sqrt{x^5}}{2} + 16\\sqrt[3]{x^5}$."
+            },
+            {
+                id: 24,
+                question: "Evaluate the derivative of $y = \\cos(1 - x^2)$.",
+                options: [
+                    { label: "A", text: "$y' = 2x\\cos(1 - x^2)$" },
+                    { label: "B", text: "$y' = 2x\\sin(1 - x^2)$" },
+                    { label: "C", text: "$y' = -2x\\sin(1 - x^2)$" },
+                    { label: "D", text: "$y' = -2x\\cos(1 - x^2)$" }
+                ],
+                correct: "B",
+                explanation: "Chain Rule $\\frac{d}{dx}[\\cos u] = -\\sin u \\cdot u'$. For $u = 1 - x^2$: $y' = -\\sin(1 - x^2) \\cdot (-2x) = 2x\\sin(1 - x^2)$."
+            },
+            {
+                id: 25,
+                question: "Evaluate the derivative of $y = 9\\sec\\left(\\frac{1}{3}x\\right)$ and $y = \\sin^{-1}(3x)$.",
+                options: [
+                    { label: "A", text: "$y' = 9\\sec\\left(\\frac{1}{3}x\\right)\\tan\\left(\\frac{1}{3}x\\right)$ and $y' = \\frac{3}{\\sqrt{1 + 9x^2}}$" },
+                    { label: "B", text: "$y' = 3\\sec\\left(\\frac{1}{3}x\\right)\\tan\\left(\\frac{1}{3}x\\right)$ and $y' = \\frac{3}{\\sqrt{1 - 9x^2}}$" },
+                    { label: "C", text: "$y' = 3\\sec\\left(\\frac{1}{3}x\\right)$ and $y' = -\\frac{3}{\\sqrt{1 - 9x^2}}$" },
+                    { label: "D", text: "$y' = 3\\sec\\left(\\frac{1}{3}x\\right)\\tan\\left(\\frac{1}{3}x\\right)$ and $y' = \\frac{1}{\\sqrt{1 - 9x^2}}$" }
+                ],
+                correct: "B",
+                explanation: "1) $\\frac{d}{dx}\\left[9\\sec\\left(\\frac{x}{3}\\right)\\right] = 9\\sec\\left(\\frac{x}{3}\\right)\\tan\\left(\\frac{x}{3}\\right)\\cdot\\frac{1}{3} = 3\\sec\\left(\\frac{1}{3}x\\right)\\tan\\left(\\frac{1}{3}x\\right)$.<br>2) $\\frac{d}{dx}[\\sin^{-1}(3x)] = \\frac{3}{\\sqrt{1 - (3x)^2}} = \\frac{3}{\\sqrt{1 - 9x^2}}$."
+            },
+            {
+                id: 26,
+                question: "Obtain the derivative of $y = \\cot^{-1}\\left(\\frac{1 + x}{1 - x}\\right)$.",
+                options: [
+                    { label: "A", text: "$\\frac{dy}{dx} = \\frac{1}{1 + x^2}$" },
+                    { label: "B", text: "$\\frac{dy}{dx} = \\frac{1}{1 - x^2}$" },
+                    { label: "C", text: "$\\frac{dy}{dx} = -\\frac{1}{1 + x^2}$" },
+                    { label: "D", text: "$\\frac{dy}{dx} = -\\frac{1}{1 - x^2}$" }
+                ],
+                correct: "C",
+                explanation: "Let $u = \\frac{1+x}{1-x} \\implies \\frac{du}{dx} = \\frac{(1-x)(1) - (1+x)(-1)}{(1-x)^2} = \\frac{2}{(1-x)^2}$.<br>$\\frac{dy}{dx} = -\\frac{1}{1+u^2}\\cdot\\frac{du}{dx} = -\\frac{1}{1 + \\left(\\frac{1+x}{1-x}\\right)^2}\\cdot\\frac{2}{(1-x)^2} = -\\frac{2}{(1-x)^2 + (1+x)^2} = -\\frac{2}{2 + 2x^2} = -\\frac{1}{1 + x^2}$."
+            },
+            {
+                id: 27,
+                question: "If $f(x) = (4x^2 - x)^3$, find $f'(1)$ and find the slope of $y = 8 - 5x^2$ at $x = 1$.",
+                options: [
+                    { label: "A", text: "$f'(1) = 144$ and slope $m = -10$" },
+                    { label: "B", text: "$f'(1) = 189$ and slope $m = 10$" },
+                    { label: "C", text: "$f'(1) = 160$ and slope $m = -5$" },
+                    { label: "D", text: "$f'(1) = 189$ and slope $m = -10$" }
+                ],
+                correct: "D",
+                explanation: "1) $f'(x) = 3(4x^2 - x)^2(8x - 1)$. At $x = 1$: $f'(1) = 3(4 - 1)^2(8 - 1) = 3(9)(7) = 189$.<br>2) $y = 8 - 5x^2 \\implies y' = -10x$. At $x = 1$: $m = -10(1) = -10$."
+            }
+        ];
+
+        function renderQuiz() {
+            const quizForm = document.getElementById('quizForm');
+            const answerKeyList = document.getElementById('answerKeyList');
+
+            quizForm.innerHTML = '';
+            answerKeyList.innerHTML = '';
+
+            questionsData.forEach((q, index) => {
+                const qCard = document.createElement('div');
+                qCard.className = 'bg-white rounded-xl shadow-sm border border-slate-200 p-6 shadow-card transition-all';
+                qCard.id = `qCard_${q.id}`;
+
+                let optionsHTML = '';
+                q.options.forEach(opt => {
+                    optionsHTML += `
+                        <label class="flex items-center gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors text-slate-700">
+                            <input type="radio" name="q_${q.id}" value="${opt.label}" class="w-4 h-4 text-blue-600 focus:ring-blue-500 border-slate-300">
+                            <span class="font-semibold text-sm text-slate-500 w-5">${opt.label})</span>
+                            <span class="text-base">${opt.text}</span>
+                        </label>
+                    `;
+                });
+
+                qCard.innerHTML = `
+                    <div class="flex items-start justify-between gap-4 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="px-2.5 py-1 bg-slate-100 text-slate-700 font-bold rounded-md text-sm">Q${index + 1}</span>
+                            <span class="text-xs font-semibold uppercase text-slate-400">10 Points</span>
+                        </div>
+                        <div id="badge_${q.id}" class="hidden"></div>
+                    </div>
+                    <div class="text-lg font-medium text-slate-800 mb-4">${q.question}</div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        ${optionsHTML}
+                    </div>
+                `;
+
+                quizForm.appendChild(qCard);
+
+                const keyItem = document.createElement('div');
+                keyItem.className = 'border-b border-slate-100 pb-5 last:border-b-0 last:pb-0';
+                keyItem.innerHTML = `
+                    <div class="flex items-start gap-3">
+                        <span class="flex-shrink-0 w-7 h-7 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-xs">${q.id}</span>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="font-semibold text-slate-800">Question ${q.id}</span>
+                                <span class="text-sm font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">Correct: ${q.correct}</span>
+                            </div>
+                            <p class="text-slate-600 text-sm mb-2 font-medium">${q.question}</p>
+                            <div class="bg-slate-50 border-l-4 border-blue-500 p-3 rounded text-sm text-slate-700">
+                                <span class="font-semibold text-blue-900 block mb-1">Step-by-step Solution:</span>
+                                ${q.explanation}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                answerKeyList.appendChild(keyItem);
+            });
+
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: "$$", right: "$$", display: true},
+                        {left: "$", right: "$", display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+
+        function submitQuiz() {
+            let score = 0;
+            const total = questionsData.length;
+
+            questionsData.forEach(q => {
+                const selected = document.querySelector(`input[name="q_${q.id}"]:checked`);
+                const card = document.getElementById(`qCard_${q.id}`);
+                const badge = document.getElementById(`badge_${q.id}`);
+
+                badge.classList.remove('hidden');
+
+                if (selected && selected.value === q.correct) {
+                    score++;
+                    card.className = "bg-white rounded-xl shadow-sm border-2 border-emerald-400 p-6 shadow-card bg-emerald-50/20";
+                    badge.innerHTML = `<span class="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 bg-emerald-100 border border-emerald-300 px-2.5 py-1 rounded-full">✓ Correct</span>`;
+                } else {
+                    card.className = "bg-white rounded-xl shadow-sm border-2 border-rose-300 p-6 shadow-card bg-rose-50/20";
+                    const chosenText = selected ? selected.value : "None";
+                    badge.innerHTML = `<span class="inline-flex items-center gap-1 text-xs font-bold text-rose-700 bg-rose-100 border border-rose-300 px-2.5 py-1 rounded-full">✕ Incorrect (Selected: ${chosenText})</span>`;
+                }
+            });
+
+            const scoreBanner = document.getElementById('scoreBanner');
+            document.getElementById('userScore').innerText = score * 10;
+            document.getElementById('userPercent').innerText = `${Math.round((score / total) * 100)}%`;
+            scoreBanner.classList.remove('hidden');
+            scoreBanner.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function resetQuiz() {
+            document.getElementById('quizForm').reset();
+            document.getElementById('scoreBanner').classList.add('hidden');
+            
+            questionsData.forEach(q => {
+                const card = document.getElementById(`qCard_${q.id}`);
+                const badge = document.getElementById(`badge_${q.id}`);
+                card.className = "bg-white rounded-xl shadow-sm border border-slate-200 p-6 shadow-card transition-all";
+                badge.classList.add('hidden');
+            });
+        }
+
+        function toggleAnswerKey() {
+            const keySection = document.getElementById('answerKeySection');
+            const isHidden = keySection.classList.contains('hidden');
+            if (isHidden) {
+                keySection.classList.remove('hidden');
+                keySection.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                keySection.classList.add('hidden');
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderQuiz();
+        });
+    </script>
+</body>
+</html>
