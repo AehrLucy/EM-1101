@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculus I Interactive Quiz</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- KaTeX for high-quality mathematical typesetting -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        .option-card {
+            transition: all 0.15s ease-in-out;
+            cursor: pointer;
+        }
+        .option-card:hover {
+            border-color: #cbd5e1;
+            background-color: #f8fafc;
+        }
+        .option-card.selected {
+            border-color: #2563eb;
+            background-color: #f0f6ff;
+            box-shadow: 0 0 0 1px #2563eb;
+        }
+        .option-card.correct-target {
+            border-color: #16a34a !important;
+            background-color: #f0fdf4 !important;
+            box-shadow: 0 0 0 1px #16a34a !important;
+        }
+        .option-card.incorrect-target {
+            border-color: #dc2626 !important;
+            background-color: #fef2f2 !important;
+            box-shadow: 0 0 0 1px #dc2626 !important;
+        }
+        .katex {
+            font-size: 1.05em;
+        }
+        .katex-display {
+            margin: 0.5em 0 !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen py-8 px-4 sm:px-8 max-w-5xl mx-auto">
+
+    <header class="mb-4">
+        <h1 class="text-3xl font-light text-gray-400 mb-3">Part 1</h1>
+        
+        <div class="bg-[#24323d] text-white px-5 py-3.5 rounded-xl flex items-center shadow-sm">
+            <span class="bg-[#e11d48] text-white text-xs font-bold px-2.5 py-1 rounded tracking-wide mr-3 uppercase">
+                EM 1101
+            </span>
+            <span class="font-semibold text-base sm:text-lg tracking-tight">
+                Calculus I: Limits &amp; Derivatives Worksheet
+            </span>
+        </div>
+    </header>
+
+    <div class="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 mb-8 shadow-sm">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div>
+                <span class="inline-block bg-blue-50 text-blue-600 text-xs font-semibold px-3 py-1 rounded-full border border-blue-100 mb-3">
+                    Practice Exams
+                </span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 tracking-tight">
+                    Calculus 1 Midterm Part 2
+                </h2>
+                <p class="text-gray-500 text-sm sm:text-base max-w-2xl">
+                    Evaluates evaluation of limits, derivative calculations, domain functions, and transformations.
+                </p>
+            </div>
+            <div class="flex bg-slate-50 border border-gray-100 rounded-xl p-3 px-6 text-center divide-x divide-gray-200 self-start md:self-auto shrink-0">
+                <div class="pr-6">
+                    <p class="text-[10px] font-bold text-gray-400 tracking-wider uppercase mb-0.5">QUESTIONS</p>
+                    <p class="text-2xl font-bold text-gray-800" id="total-questions-count">10</p>
+                </div>
+                <div class="pl-6">
+                    <p class="text-[10px] font-bold text-gray-400 tracking-wider uppercase mb-0.5">POINTS</p>
+                    <p class="text-2xl font-bold text-gray-800" id="total-points-count">100</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Questions Container -->
+    <div id="quiz-container" class="space-y-6"></div>
+
+    <div class="mt-8 pt-4 flex flex-col sm:flex-row justify-between items-center gap-4 border-t border-gray-200/60">
+        <button id="submit-btn" onclick="submitQuiz()" class="w-full sm:w-auto bg-[#2563eb] hover:bg-blue-700 text-white font-medium px-6 py-3 rounded-xl shadow-sm transition-all duration-200 flex items-center justify-center gap-2">
+            <i class="fa-regular fa-circle-check text-lg"></i>
+            <span>Submit &amp; Grade Quiz</span>
+        </button>
+
+        <button id="toggle-key-btn" onclick="toggleAnswerKey()" class="w-full sm:w-auto bg-[#1e293b] hover:bg-slate-800 text-white font-medium px-6 py-3 rounded-xl shadow-sm transition-all duration-200 flex items-center justify-center gap-2">
+            <i class="fa-solid fa-key text-sm"></i>
+            <span>Toggle Answer Key &amp; Explanations</span>
+        </button>
+    </div>
+
+    <div id="score-banner" class="hidden mt-6 bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+                <h3 class="text-lg font-bold text-gray-900">Quiz Submission Results</h3>
+                <p class="text-sm text-gray-600" id="score-text">You scored 0 out of 100 points.</p>
+            </div>
+            <div id="score-badge" class="px-4 py-2 rounded-xl text-lg font-bold bg-blue-100 text-blue-800">
+                0%
+            </div>
+        </div>
+    </div>
+
+    <div id="answer-key-section" class="hidden mt-6 bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm transition-all duration-300">
+        <div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-100">
+            <div class="flex items-center gap-3">
+                <div class="p-2.5 bg-amber-50 text-amber-600 rounded-xl">
+                    <i class="fa-solid fa-lightbulb text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-gray-900">Answer Key &amp; Step-by-Step Solutions</h3>
+                    <p class="text-xs sm:text-sm text-gray-500">Review complete mathematical proofs and derivations for each problem.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="answer-key-container" class="space-y-6"></div>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                id: 1,
+                points: 10,
+                question: "Which among the following is not a linear function?",
+                options: [
+                    { id: "A", text: "$y = 2x$" },
+                    { id: "B", text: "$5y = 3 - x$" },
+                    { id: "C", text: "$3y - 1 = x$" },
+                    { id: "D", text: "$\\frac{1}{y} = x$" }
+                ],
+                correctAnswer: "D",
+                explanation: "A linear function can be written in slope-intercept form $y = mx + b$. Rearranging option D gives $y = \\frac{1}{x}$, which represents a hyperbola (a rational function), making it non-linear."
+            },
+            {
+                id: 2,
+                points: 10,
+                question: "Given the function $f(x) = \\sqrt{x - 2}$, which of the following is its domain, $D$, and range, $R$?",
+                options: [
+                    { id: "A", text: "$D: (-\\infty, \\infty), \\, R: (-\\infty, \\infty)$" },
+                    { id: "B", text: "$D: [2, \\infty), \\, R: (-\\infty, \\infty)$" },
+                    { id: "C", text: "$D: [2, \\infty), \\, R: [0, \\infty)$" },
+                    { id: "D", text: "$D: [0, 2], \\, R: (-\\infty, \\infty)$" }
+                ],
+                correctAnswer: "C",
+                explanation: "For real values under the radical, $x - 2 \\ge 0 \\implies x \\ge 2$, so the domain is $D: [2, \\infty)$. Since the principal square root is non-negative, the range is $R: [0, \\infty)$."
+            },
+            {
+                id: 3,
+                points: 10,
+                question: "Which among the following is the derivative of the function $g(x) = x^4 + 3x^2 - 1$?",
+                options: [
+                    { id: "A", text: "$6x - 4x^3$" },
+                    { id: "B", text: "$4x^3 - 6x$" },
+                    { id: "C", text: "$2x(2x^2 + 3)$" },
+                    { id: "D", text: "$x^2(x^2 + 3) - 1$" }
+                ],
+                correctAnswer: "C",
+                explanation: "By applying the Power Rule: $g'(x) = 4x^3 + 6x$. Factoring out the common factor $2x$ yields $g'(x) = 2x(2x^2 + 3)$."
+            },
+            {
+                id: 4,
+                points: 10,
+                question: "If $f(x) = 2^x$, find $\\frac{f(x+3)}{f(x-1)}$.",
+                options: [
+                    { id: "A", text: "32" },
+                    { id: "B", text: "16" },
+                    { id: "C", text: "8" },
+                    { id: "D", text: "4" }
+                ],
+                correctAnswer: "B",
+                explanation: "Using exponent rules: $\\frac{f(x+3)}{f(x-1)} = \\frac{2^{x+3}}{2^{x-1}} = 2^{(x+3)-(x-1)} = 2^4 = 16$."
+            },
+            {
+                id: 5,
+                points: 10,
+                question: "Find the derivative of $y = x^2 \\sec^{-1}\\left(\\sqrt{x}\\right)$ at $x = 2$.",
+                options: [
+                    { id: "A", text: "$2\\pi$" },
+                    { id: "B", text: "$\\pi$" },
+                    { id: "C", text: "$\\pi - 1$" },
+                    { id: "D", text: "$\\pi + 1$" }
+                ],
+                correctAnswer: "D",
+                explanation: "Applying the product rule and chain rule:<br>$$y' = 2x \\sec^{-1}(\\sqrt{x}) + x^2 \\cdot \\frac{1}{\\sqrt{x}\\sqrt{x-1}} \\cdot \\frac{1}{2\\sqrt{x}} = 2x \\sec^{-1}(\\sqrt{x}) + \\frac{1}{2\\sqrt{x-1}}$$<br>Evaluating at $x = 2$:<br>$$y'(2) = 4\\sec^{-1}(\\sqrt{2}) + \\frac{1}{2} = 4\\left(\\frac{\\pi}{4}\\right) + 1 = \\pi + 1$$"
+            },
+            {
+                id: 6,
+                points: 10,
+                question: "Find the composite function $(f \\circ g)(x)$ if $f(x) = \\sqrt{x + 1}$ and $g(x) = 4x - 3$.",
+                options: [
+                    { id: "A", text: "$4\\sqrt{x+1} - 3$" },
+                    { id: "B", text: "$\\sqrt{4x - 2}$" },
+                    { id: "C", text: "$\\sqrt{4x - 3} + 1$" },
+                    { id: "D", text: "$4\\sqrt{x - 3}$" }
+                ],
+                correctAnswer: "B",
+                explanation: "By definition of composite functions: $(f \\circ g)(x) = f(g(x)) = \\sqrt{(4x - 3) + 1} = \\sqrt{4x - 2}$."
+            },
+            {
+                id: 7,
+                points: 10,
+                question: "Find the first derivative of $f(x) = \\frac{1}{\\sqrt{x}}$.",
+                options: [
+                    { id: "A", text: "$f'(x) = -\\frac{1}{2x\\sqrt{x}}$" },
+                    { id: "B", text: "$f'(x) = \\frac{1}{2x\\sqrt{x}}$" },
+                    { id: "C", text: "$f'(x) = -\\frac{1}{2\\sqrt{x}}$" },
+                    { id: "D", text: "$f'(x) = -\\frac{1}{2x}$" }
+                ],
+                correctAnswer: "A",
+                explanation: "Rewrite as exponential form $f(x) = x^{-1/2}$. Applying the power rule: $f'(x) = -\\frac{1}{2}x^{-3/2} = -\\frac{1}{2x^{3/2}} = -\\frac{1}{2x\\sqrt{x}}$."
+            },
+            {
+                id: 8,
+                points: 10,
+                question: "Evaluate $\\lim_{x \\to 4} \\frac{x - 4}{x^2 - x - 12}$.",
+                options: [
+                    { id: "A", text: "$\\frac{1}{7}$" },
+                    { id: "B", text: "$7$" },
+                    { id: "C", text: "$\\infty$" },
+                    { id: "D", text: "$0$" }
+                ],
+                correctAnswer: "A",
+                explanation: "Factoring the quadratic denominator:<br>$$\\lim_{x \\to 4} \\frac{x - 4}{(x - 4)(x + 3)} = \\lim_{x \\to 4} \\frac{1}{x + 3} = \\frac{1}{4 + 3} = \\frac{1}{7}$$"
+            },
+            {
+                id: 9,
+                points: 10,
+                question: "If $y = u^2 - 3u + 2$ where $u = \\sqrt{x}$, find $\\frac{dy}{dx}$ using the chain rule.",
+                options: [
+                    { id: "A", text: "$(2\\sqrt{x} - 3)\\left(\\frac{1}{2\\sqrt{x}}\\right)$" },
+                    { id: "B", text: "$(\\sqrt{x} - 3)\\left(\\frac{1}{2\\sqrt{x}}\\right)$" },
+                    { id: "C", text: "$(2\\sqrt{x} - 3)\\left(\\frac{2}{3\\sqrt{x}}\\right)$" },
+                    { id: "D", text: "$(\\sqrt{2x} - 3)\\left(\\frac{1}{2\\sqrt{3x}}\\right)$" }
+                ],
+                correctAnswer: "A",
+                explanation: "Using the Chain Rule $\\frac{dy}{dx} = \\frac{dy}{du} \\cdot \\frac{du}{dx}$:<br>$$\\frac{dy}{du} = 2u - 3 = 2\\sqrt{x} - 3, \\quad \\frac{du}{dx} = \\frac{1}{2\\sqrt{x}}$$<br>$$\\frac{dy}{dx} = (2\\sqrt{x} - 3)\\left(\\frac{1}{2\\sqrt{x}}\\right)$$"
+            },
+            {
+                id: 10,
+                points: 10,
+                question: "Which among the following functions is an odd function?",
+                options: [
+                    { id: "A", text: "$f(x) = \\frac{\\sin x}{\\cos x}$" },
+                    { id: "B", text: "$f(x) = \\sin x + \\cos x$" },
+                    { id: "C", text: "$f(x) = \\cos x + \\cos x$" },
+                    { id: "D", text: "$f(x) = \\cos^2 x$" }
+                ],
+                correctAnswer: "A",
+                explanation: "An odd function satisfies $f(-x) = -f(x)$. For option A, $f(x) = \\tan x$, where $f(-x) = \\tan(-x) = -\\tan x = -f(x)$."
+            }
+        ];
+
+        const userAnswers = {};
+
+        function renderQuiz() {
+            const container = document.getElementById('quiz-container');
+            const keyContainer = document.getElementById('answer-key-container');
+            
+            container.innerHTML = '';
+            keyContainer.innerHTML = '';
+
+            quizData.forEach((q) => {
+                // Question Card
+                const qCard = document.createElement('div');
+                qCard.className = "bg-white rounded-2xl border border-gray-200 p-6 sm:p-7 shadow-sm transition-all";
+                qCard.id = `q-card-${q.id}`;
+
+                qCard.innerHTML = `
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="bg-slate-100 text-slate-700 font-bold text-xs px-2.5 py-1 rounded-md">Q${q.id}</span>
+                        <span class="bg-slate-100 text-slate-500 font-medium text-xs px-2.5 py-1 rounded-md uppercase tracking-wider">${q.points} POINTS</span>
+                    </div>
+
+                    <div class="text-gray-900 font-medium text-base sm:text-lg mb-6 leading-relaxed">
+                        ${q.question}
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+                        ${q.options.map(opt => `
+                            <div id="opt-${q.id}-${opt.id}" 
+                                 onclick="selectOption(${q.id}, '${opt.id}')"
+                                 class="option-card bg-white border border-gray-200 rounded-xl p-3.5 px-4 flex items-center gap-3">
+                                <div class="w-5 h-5 rounded-full border border-gray-300 flex items-center justify-center shrink-0 radio-circle">
+                                    <div class="w-2.5 h-2.5 rounded-full bg-blue-600 hidden inner-dot"></div>
+                                </div>
+                                <div class="text-sm sm:text-base text-gray-800 font-medium">
+                                    <span class="font-bold mr-1">${opt.id})</span> ${opt.text}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(qCard);
+
+                // Solution Card
+                const solutionItem = document.createElement('div');
+                solutionItem.className = "p-5 bg-slate-50 rounded-xl border border-slate-200/80";
+                solutionItem.innerHTML = `
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="font-bold text-slate-800">Question ${q.id} Solution</span>
+                        <span class="text-xs font-semibold px-2.5 py-1 bg-green-100 text-green-700 rounded-md">Correct Answer: ${q.correctAnswer}</span>
+                    </div>
+                    <div class="text-sm text-slate-700 leading-relaxed mt-2">
+                        ${q.explanation}
+                    </div>
+                `;
+                keyContainer.appendChild(solutionItem);
+            });
+
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false},
+                    {left: '\\(', right: '\\)', display: false},
+                    {left: '\\[', right: '\\]', display: true}
+                ],
+                throwOnError: false
+            });
+        }
+
+        function selectOption(questionId, optionId) {
+            userAnswers[questionId] = optionId;
+
+            const q = quizData.find(item => item.id === questionId);
+            q.options.forEach(opt => {
+                const el = document.getElementById(`opt-${questionId}-${opt.id}`);
+                const innerDot = el.querySelector('.inner-dot');
+                const circle = el.querySelector('.radio-circle');
+
+                if (opt.id === optionId) {
+                    el.classList.add('selected');
+                    innerDot.classList.remove('hidden');
+                    circle.classList.add('border-blue-600');
+                } else {
+                    el.classList.remove('selected');
+                    innerDot.classList.add('hidden');
+                    circle.classList.remove('border-blue-600');
+                }
+            });
+        }
+
+        function submitQuiz() {
+            let score = 0;
+            const totalPoints = quizData.reduce((sum, q) => sum + q.points, 0);
+
+            quizData.forEach(q => {
+                const selected = userAnswers[q.id];
+                
+                q.options.forEach(opt => {
+                    const el = document.getElementById(`opt-${q.id}-${opt.id}`);
+                    el.classList.remove('correct-target', 'incorrect-target');
+
+                    if (opt.id === q.correctAnswer) {
+                        el.classList.add('correct-target');
+                    } else if (selected === opt.id && selected !== q.correctAnswer) {
+                        el.classList.add('incorrect-target');
+                    }
+                });
+
+                if (selected === q.correctAnswer) {
+                    score += q.points;
+                }
+            });
+
+            const scoreBanner = document.getElementById('score-banner');
+            const scoreText = document.getElementById('score-text');
+            const scoreBadge = document.getElementById('score-badge');
+
+            const percentage = Math.round((score / totalPoints) * 100);
+            scoreText.textContent = `You scored ${score} out of ${totalPoints} points (${percentage}%).`;
+            scoreBadge.textContent = `${percentage}%`;
+
+            if (percentage >= 70) {
+                scoreBadge.className = "px-4 py-2 rounded-xl text-lg font-bold bg-green-100 text-green-800";
+            } else {
+                scoreBadge.className = "px-4 py-2 rounded-xl text-lg font-bold bg-amber-100 text-amber-800";
+            }
+
+            scoreBanner.classList.remove('hidden');
+            scoreBanner.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function toggleAnswerKey() {
+            const keySection = document.getElementById('answer-key-section');
+            if (keySection.classList.contains('hidden')) {
+                keySection.classList.remove('hidden');
+                keySection.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                keySection.classList.add('hidden');
+            }
+        }
+
+        window.onload = renderQuiz;
+    </script>
+</body>
+</html>

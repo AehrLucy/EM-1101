@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculus 1 Worksheet & Quiz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        /* Custom print styles */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            body {
+                background-color: white;
+            }
+            .shadow-card {
+                box-shadow: none !important;
+                border: 1px solid #cbd5e1 !important;
+            }
+            .answer-key-content {
+                display: block !important;
+            }
+        }
+        .katex-display {
+            margin: 0.5em 0 !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-12">
+
+    <!-- Canvas LMS Style Top Navigation Bar -->
+    <header class="bg-[#2D3B45] text-white shadow-md no-print sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="bg-red-600 p-1.5 rounded text-white font-bold text-xs tracking-wider">EM 1101</div>
+                <h1 class="font-semibold text-lg sm:text-xl text-slate-100 truncate">Calculus I: Limits & Derivatives Worksheet</h1>
+            </div>
+            
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-4xl mx-auto px-4 py-8">
+
+        <!-- Quiz Meta Header Card -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-8 shadow-card">
+            <div class="flex flex-col md:flex-row justify-between md:items-center gap-4 pb-4 border-b border-slate-200">
+                <div>
+                    <div class="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 mb-2">
+                        Practice Exams
+                    </div>
+                    <h2 class="text-2xl font-bold text-slate-800">Calculus 1 Midterm Part 1</h2>
+                    <p class="text-slate-500 text-sm mt-1">Evaluates evaluation of limits, derivative calculations, domain functions, and transformations.</p>
+                </div>
+                <div class="flex items-center gap-4 text-sm text-slate-600 bg-slate-50 p-3 rounded-lg border border-slate-200">
+                    <div class="text-center">
+                        <span class="block text-xs uppercase font-semibold text-slate-400">Questions</span>
+                        <span class="text-lg font-bold text-slate-700">10</span>
+                    </div>
+                    <div class="h-8 w-px bg-slate-300"></div>
+                    <div class="text-center">
+                        <span class="block text-xs uppercase font-semibold text-slate-400">Points</span>
+                        <span class="text-lg font-bold text-slate-700">100</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- -->
+           
+        </div>
+
+        <!-- Score Banner (Interactive mode) -->
+        <div id="scoreBanner" class="hidden bg-emerald-50 border border-emerald-300 rounded-xl p-5 mb-8 text-emerald-900 no-print flex items-center justify-between shadow-sm">
+            <div class="flex items-center gap-3">
+                <div class="p-3 bg-emerald-500 text-white rounded-lg">
+                    <i data-lucide="award" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg">Quiz Complete!</h3>
+                    <p class="text-sm text-emerald-800">Your Score: <span id="userScore" class="font-extrabold text-lg">0</span> / 10 (<span id="userPercent">0%</span>)</p>
+                </div>
+            </div>
+            <button onclick="resetQuiz()" class="text-xs font-semibold uppercase tracking-wider bg-white border border-emerald-300 text-emerald-700 hover:bg-emerald-100 px-4 py-2 rounded-lg transition-all">
+                Reset Answers
+            </button>
+        </div>
+
+        <!-- Questions List Container -->
+        <form id="quizForm" class="space-y-6">
+            <!-- Questions dynamically generated by JavaScript for clean maintenance -->
+        </form>
+
+        <!-- Quiz Action Controls -->
+        <div class="flex flex-wrap items-center justify-between gap-4 mt-8 no-print">
+            <button type="button" onclick="submitQuiz()" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold rounded-lg shadow-sm transition-colors flex items-center gap-2">
+                <i data-lucide="check-circle" class="w-5 h-5"></i>
+                <span>Submit & Grade Quiz</span>
+            </button>
+
+            <button type="button" onclick="toggleAnswerKey()" class="px-5 py-3 bg-slate-800 hover:bg-slate-900 text-white font-medium rounded-lg shadow-sm transition-colors flex items-center gap-2">
+                <i data-lucide="key" class="w-4 h-4"></i>
+                <span id="toggleKeyText">Toggle Answer Key & Explanations</span>
+            </button>
+        </div>
+
+        <!-- Answer Key Section -->
+        <section id="answerKeySection" class="hidden mt-12 bg-white rounded-xl shadow-sm border border-slate-300 p-6 shadow-card">
+            <div class="flex items-center justify-between border-b border-slate-200 pb-4 mb-6">
+                <div>
+                    <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                        <i data-lucide="book-open" class="w-5 h-5 text-blue-600"></i>
+                        Answer Key & Complete Solutions
+                    </h3>
+                    <p class="text-slate-500 text-sm mt-0.5">Detailed step-by-step solutions for each problem.</p>
+                </div>
+                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-1 rounded-full">Calculus I</span>
+            </div>
+
+            <div id="answerKeyList" class="space-y-6">
+                <!-- Populated via JS -->
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Questions Data Structure
+        const questionsData = [
+            {
+                id: 1,
+                question: "Given: $f(x) = \\frac{1}{x-2}$, evaluate $f'(3)$.",
+                options: [
+                    { label: "A", text: "$1$" },
+                    { label: "B", text: "$-1$" },
+                    { label: "C", text: "$0$" },
+                    { label: "D", text: "$\\infty$" }
+                ],
+                correct: "B",
+                explanation: "Using the power rule or quotient rule, $f'(x) = -\\frac{1}{(x-2)^2}$. Evaluating at $x = 3$ gives $f'(3) = -\\frac{1}{(3-2)^2} = -\\frac{1}{1^2} = -1$."
+            },
+            {
+                id: 2,
+                question: "Let $f(x) = \\frac{1}{x}$. Evaluate $\\lim_{x \\to 0^-} f(x)$.",
+                options: [
+                    { label: "A", text: "$0$" },
+                    { label: "B", text: "$\\text{DNE}$" },
+                    { label: "C", text: "$-\\infty$" },
+                    { label: "D", text: "$\\infty$" }
+                ],
+                correct: "C",
+                explanation: "As $x$ approaches $0$ from the left (taking negative values close to zero), $\\frac{1}{x}$ decreases without bound toward $-\\infty$."
+            },
+            {
+                id: 3,
+                question: "Find the domain of the function $f(x) = \\frac{x}{3x - 1}$.",
+                options: [
+                    { label: "A", text: "$\\{x \\mid x \\neq \\frac{1}{3}\\}$" },
+                    { label: "B", text: "$\\{x \\mid x \\neq 1\\}$" },
+                    { label: "C", text: "$\\{x \\mid x \\in \\mathbb{R}\\}$" },
+                    { label: "D", text: "$\\infty$" }
+                ],
+                correct: "A",
+                explanation: "The denominator cannot equal zero: $3x - 1 \\neq 0 \\implies 3x \\neq 1 \\implies x \\neq \\frac{1}{3}$. Thus, the domain is $\\{x \\mid x \\neq \\frac{1}{3}\\}$."
+            },
+            {
+                id: 4,
+                question: "Find the derivative of the function $y = \\frac{1}{2}x - \\frac{1}{4}\\sin(2x)$.",
+                options: [
+                    { label: "A", text: "$1 - \\cos(2x)$" },
+                    { label: "B", text: "$1 - \\sin(2x)$" },
+                    { label: "C", text: "$\\sin^2(x)$" },
+                    { label: "D", text: "$\\cos^2(x)$" }
+                ],
+                correct: "C",
+                explanation: "Differentiating with respect to $x$: $\\frac{dy}{dx} = \\frac{1}{2} - \\frac{1}{4}(2\\cos 2x) = \\frac{1}{2}(1 - \\cos 2x)$. Applying the half-angle identity $\\sin^2 x = \\frac{1 - \\cos 2x}{2}$, we obtain $\\sin^2(x)$."
+            },
+            {
+                id: 5,
+                question: "Given that $f(2)=1$, $f'(2)=-3$, $g(2)=4$, and $g'(2)=8$, find $(fg)'(2)$.",
+                options: [
+                    { label: "A", text: "$-20$" },
+                    { label: "B", text: "$29$" },
+                    { label: "C", text: "$20$" },
+                    { label: "D", text: "$-4$" }
+                ],
+                correct: "D",
+                explanation: "By the Product Rule: $(fg)'(2) = f'(2)g(2) + f(2)g'(2) = (-3)(4) + (1)(8) = -12 + 8 = -4$."
+            },
+            {
+                id: 6,
+                question: "Which of the following represents the graph of $f(x)$ moved to the left by $2$ units?",
+                options: [
+                    { label: "A", text: "$f(x - 2)$" },
+                    { label: "B", text: "$f(x) - 2$" },
+                    { label: "C", text: "$f(x + 2)$" },
+                    { label: "D", text: "$f(x) + 2$" }
+                ],
+                correct: "C",
+                explanation: "Horizontal shifts are represented by modifying the input argument: $f(x + c)$ shifts the graph left by $c$ units when $c > 0$."
+            },
+            {
+                id: 7,
+                question: "The function $f(x) = \\tan(x)$ is ____________.",
+                options: [
+                    { label: "A", text: "an even function" },
+                    { label: "B", text: "an odd function" },
+                    { label: "C", text: "neither even nor odd" },
+                    { label: "D", text: "indeterminate" }
+                ],
+                correct: "B",
+                explanation: "A function is odd if $f(-x) = -f(x)$. Since $\\tan(-x) = \\frac{\\sin(-x)}{\\cos(-x)} = \\frac{-\\sin x}{\\cos x} = -\\tan(x)$, it is an odd function."
+            },
+            {
+                id: 8,
+                question: "Given that $f(x) = \\sqrt{x}$ and $g(x) = x^2 - 25$, find $(g \\circ f)(x)$.",
+                options: [
+                    { label: "A", text: "$x - 25$" },
+                    { label: "B", text: "$\\sqrt{x^2 - 25}$" },
+                    { label: "C", text: "$\\sqrt{x} - 25$" },
+                    { label: "D", text: "$x - 25\\sqrt{x}$" }
+                ],
+                correct: "A",
+                explanation: "Composition $(g \\circ f)(x) = g(f(x)) = (\\sqrt{x})^2 - 25 = x - 25$ (for $x \\ge 0$)."
+            },
+            {
+                id: 9,
+                question: "If $f(x) = \\log_a\\left(\\frac{1}{x}\\right)$, find $f(a^{-3})$.",
+                options: [
+                    { label: "A", text: "$-3$" },
+                    { label: "B", text: "$3$" },
+                    { label: "C", text: "$-1$" },
+                    { label: "D", text: "$a^3$" }
+                ],
+                correct: "B",
+                explanation: "Substitute $x = a^{-3}$: $f(a^{-3}) = \\log_a\\left(\\frac{1}{a^{-3}}\\right) = \\log_a(a^3) = 3$."
+            },
+            {
+                id: 10,
+                question: "Evaluate $\\lim_{x \\to 1} \\frac{7x^2 - 4x - 3}{3x^2 - 4x + 1}$.",
+                options: [
+                    { label: "A", text: "$0$" },
+                    { label: "B", text: "$1$" },
+                    { label: "C", text: "$3$" },
+                    { label: "D", text: "$5$" }
+                ],
+                correct: "D",
+                explanation: "Direct substitution gives $\\frac{0}{0}$. Factor numerator and denominator: $\\frac{(7x + 3)(x - 1)}{(3x - 1)(x - 1)}$. Canceling $(x - 1)$ gives $\\lim_{x \\to 1} \\frac{7x + 3}{3x - 1} = \\frac{7(1) + 3}{3(1) - 1} = \\frac{10}{2} = 5$."
+            }
+        ];
+
+        function renderQuiz() {
+            const quizForm = document.getElementById('quizForm');
+            const answerKeyList = document.getElementById('answerKeyList');
+
+            quizForm.innerHTML = '';
+            answerKeyList.innerHTML = '';
+
+            questionsData.forEach((q, index) => {
+                // Generate Question Card
+                const qCard = document.createElement('div');
+                qCard.className = 'bg-white rounded-xl shadow-sm border border-slate-200 p-6 shadow-card transition-all';
+                qCard.id = `qCard_${q.id}`;
+
+                let optionsHTML = '';
+                q.options.forEach(opt => {
+                    optionsHTML += `
+                        <label class="flex items-center gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors text-slate-700">
+                            <input type="radio" name="q_${q.id}" value="${opt.label}" class="w-4 h-4 text-blue-600 focus:ring-blue-500 border-slate-300">
+                            <span class="font-semibold text-sm text-slate-500 w-5">${opt.label})</span>
+                            <span class="text-base">${opt.text}</span>
+                        </label>
+                    `;
+                });
+
+                qCard.innerHTML = `
+                    <div class="flex items-start justify-between gap-4 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="px-2.5 py-1 bg-slate-100 text-slate-700 font-bold rounded-md text-sm">Q${index + 1}</span>
+                            <span class="text-xs font-semibold uppercase text-slate-400">10 Points</span>
+                        </div>
+                        <div id="badge_${q.id}" class="hidden"></div>
+                    </div>
+                    <div class="text-lg font-medium text-slate-800 mb-4">${q.question}</div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        ${optionsHTML}
+                    </div>
+                `;
+
+                quizForm.appendChild(qCard);
+
+                // Generate Answer Key Item
+                const keyItem = document.createElement('div');
+                keyItem.className = 'border-b border-slate-100 pb-5 last:border-b-0 last:pb-0';
+                keyItem.innerHTML = `
+                    <div class="flex items-start gap-3">
+                        <span class="flex-shrink-0 w-7 h-7 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-xs">${q.id}</span>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="font-semibold text-slate-800">Question ${q.id}</span>
+                                <span class="text-sm font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">Correct: ${q.correct}</span>
+                            </div>
+                            <p class="text-slate-600 text-sm mb-2 font-medium">${q.question}</p>
+                            <div class="bg-slate-50 border-l-4 border-blue-500 p-3 rounded text-sm text-slate-700">
+                                <span class="font-semibold text-blue-900 block mb-1">Step-by-step Solution:</span>
+                                ${q.explanation}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                answerKeyList.appendChild(keyItem);
+            });
+
+            // Initialize KaTeX Math Rendering
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "$$", right: "$$", display: true},
+                    {left: "$", right: "$", display: false}
+                ],
+                throwOnError: false
+            });
+
+            // Refresh icons
+            lucide.createIcons();
+        }
+
+        function submitQuiz() {
+            let score = 0;
+            const total = questionsData.length;
+
+            questionsData.forEach(q => {
+                const selected = document.querySelector(`input[name="q_${q.id}"]:checked`);
+                const card = document.getElementById(`qCard_${q.id}`);
+                const badge = document.getElementById(`badge_${q.id}`);
+
+                badge.classList.remove('hidden');
+
+                if (selected && selected.value === q.correct) {
+                    score++;
+                    card.className = "bg-white rounded-xl shadow-sm border-2 border-emerald-400 p-6 shadow-card bg-emerald-50/20";
+                    badge.innerHTML = `<span class="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 bg-emerald-100 border border-emerald-300 px-2.5 py-1 rounded-full"><i data-lucide="check" class="w-3.5 h-3.5"></i> Correct</span>`;
+                } else {
+                    card.className = "bg-white rounded-xl shadow-sm border-2 border-rose-300 p-6 shadow-card bg-rose-50/20";
+                    const chosenText = selected ? selected.value : "None";
+                    badge.innerHTML = `<span class="inline-flex items-center gap-1 text-xs font-bold text-rose-700 bg-rose-100 border border-rose-300 px-2.5 py-1 rounded-full"><i data-lucide="x" class="w-3.5 h-3.5"></i> Incorrect (Selected: ${chosenText})</span>`;
+                }
+            });
+
+            // Show Score Header
+            const scoreBanner = document.getElementById('scoreBanner');
+            const userScore = document.getElementById('userScore');
+            const userPercent = document.getElementById('userPercent');
+
+            userScore.innerText = score * 10;
+            userPercent.innerText = `${Math.round((score / total) * 100)}%`;
+            scoreBanner.classList.remove('hidden');
+            scoreBanner.scrollIntoView({ behavior: 'smooth' });
+
+            lucide.createIcons();
+        }
+
+        function resetQuiz() {
+            document.getElementById('quizForm').reset();
+            document.getElementById('scoreBanner').classList.add('hidden');
+            
+            questionsData.forEach(q => {
+                const card = document.getElementById(`qCard_${q.id}`);
+                const badge = document.getElementById(`badge_${q.id}`);
+                card.className = "bg-white rounded-xl shadow-sm border border-slate-200 p-6 shadow-card transition-all";
+                badge.classList.add('hidden');
+            });
+        }
+
+        function toggleAnswerKey() {
+            const keySection = document.getElementById('answerKeySection');
+            const isHidden = keySection.classList.contains('hidden');
+            
+            if (isHidden) {
+                keySection.classList.remove('hidden');
+                keySection.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                keySection.classList.add('hidden');
+            }
+        }
+
+        // Initialize on Load
+        window.addEventListener('DOMContentLoaded', () => {
+            renderQuiz();
+        });
+    </script>
+</body>
+</html>
