@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ME 3115 Midterm: Historical &amp; Experimental Engine Forensics Lab</title>
+<style>
+:root{--bg:#fff;--fg:#1c2330;--mut:#5b6575;--line:#d8dde6;--acc:#1f4e8c;--soft:#f2f5fa;--warn:#fff6e0}
+@media (prefers-color-scheme:dark){:root{--bg:#14181f;--fg:#e6e9ef;--mut:#9aa4b5;--line:#2c3441;--acc:#7fb0ee;--soft:#1c222c;--warn:#2a2415}}
+html{background:var(--bg)}
+body{font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--fg);max-width:980px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:1.7rem;margin:.2em 0}h2{font-size:1.3rem;margin:2em 0 .5em;border-bottom:2px solid var(--acc);padding-bottom:.2em}
+h3{font-size:1.05rem;margin:1.4em 0 .4em;color:var(--acc)}
+.sub{color:var(--mut)}
+.wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.92rem;margin:.6em 0}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{background:var(--soft)}
+.box{background:var(--soft);border-left:4px solid var(--acc);padding:10px 14px;margin:1em 0}
+.warn{background:var(--warn);border-left-color:#d49a00}
+code{background:var(--soft);padding:1px 5px;border-radius:3px}
+input{font:inherit;padding:6px 8px;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--fg);width:8em}
+button{font:inherit;padding:6px 14px;border:0;border-radius:4px;background:var(--acc);color:var(--bg);cursor:pointer}
+@media print{body{max-width:none}}
+</style>
+</head>
+<body>
+
+<h1>ME 3115 Midterm: Historical &amp; Experimental Engine Forensics Lab</h1>
+<p class="sub">Asynchronous Virtual Laboratory Module &middot; Internal Combustion Engines &middot; 7-day window &middot; Revised handout</p>
+
+<h2>1. Overview and Objective</h2>
+<p>In place of the scheduled midterm, you will analyze one historical or experimental <b>four-stroke, spark-ignition</b> reciprocating engine using the virtual engine bench at <i>realenginesimulator.com</i>. You will (1) set up and document the baseline, (2) compute geometry, kinematics and performance by hand, (3) run a constrained tuning study aimed at a bottleneck of the engine&rsquo;s layout, and (4) use the engine&rsquo;s own P-V indicator diagram to reconcile the ideal air-standard cycle with real loss mechanisms.</p>
+<p>Several students share each engine, but <b>your numbers will differ</b>: your checkpoints, crank angle, tuning track, design objective, first step and hot-gas <i>k</i> are generated from your Student ID (Section 4). Matching numbers between two submissions trigger an integrity review. Estimated effort: 10 to 14 hours.</p>
+
+<h2>2. Scope and Formulas (Course Notation)</h2>
+<p>Every engine in the pool is a four-stroke SI piston engine, so <b>the same formulas apply to all of them</b>. Use the notation and constants of the course Formula Reference: bore <i>b</i>, stroke <i>s</i>, cylinders <i>n<sub>c</sub></i>, <i>n<sub>R</sub></i> = 2, specific-heat ratio <i>k</i>. Cold air-standard constants: R = 0.287 kJ/kg&middot;K, c<sub>p</sub> = 1.005, c<sub>v</sub> = 0.718 kJ/kg&middot;K, <i>k</i> = 1.4.</p>
+<div class="wrap"><table>
+<tr><th>Topic</th><th>Formulas used in this lab</th></tr>
+<tr><td>Geometry</td><td>V<sub>d</sub> = (&pi;/4) b&sup2; s &nbsp;|&nbsp; V<sub>d,total</sub> = n<sub>c</sub>&middot;V<sub>d</sub> &nbsp;|&nbsp; r = (V<sub>c</sub>+V<sub>d</sub>)/V<sub>c</sub> = 1 + V<sub>d</sub>/V<sub>c</sub>, so V<sub>c</sub> = V<sub>d</sub>/(r&minus;1) &nbsp;|&nbsp; &epsilon; = a/l = s/2l</td></tr>
+<tr><td>Kinematics</td><td>Mean piston speed: &Uacute;<sub>p</sub> = 2Ns [m/s] (N in rev/s) <br>V(&theta;) = V<sub>c</sub>[1 + ((r&minus;1)/2)((1&minus;cos&theta;) + (1/&epsilon;)(1 &minus; &radic;(1&minus;&epsilon;&sup2;sin&sup2;&theta;)))] <br>U<sub>p</sub>(&theta;) = (&pi;/2)&Uacute;<sub>p</sub> sin&theta; [1 + &epsilon;cos&theta;/&radic;(1&minus;&epsilon;&sup2;sin&sup2;&theta;)]</td></tr>
+<tr><td>Power &amp; MEP</td><td>Brake power: &Wdot;<sub>b</sub> = 2&pi;&tau;N &nbsp;|&nbsp; bmep = n<sub>R</sub>&Wdot;<sub>b</sub>/(V<sub>d,total</sub>&middot;N) = 4&pi;&tau;/V<sub>d,total</sub> <br>Indicated power: &Wdot;<sub>i</sub> = n<sub>c</sub>&middot;W<sub>i</sub>&middot;(N/n<sub>R</sub>), with W<sub>i</sub> = imep&middot;V<sub>d</sub> <br>&eta;<sub>m</sub> = &Wdot;<sub>b</sub>/&Wdot;<sub>i</sub> = bmep/imep &nbsp;|&nbsp; fmep = imep &minus; bmep</td></tr>
+<tr><td>Fuel &amp; efficiency</td><td>bsfc = &#7745;<sub>f</sub>/&Wdot;<sub>b</sub> &nbsp;|&nbsp; &eta;<sub>b</sub> = &Wdot;<sub>b</sub>/(&#7745;<sub>f</sub>q<sub>c</sub>) = 1/(bsfc&middot;q<sub>c</sub>) &nbsp;|&nbsp; &eta;<sub>b</sub> = 3600/(bsfc[kg/kW&middot;h] &middot; q<sub>c</sub>[kJ/kg])</td></tr>
+<tr><td>Breathing</td><td>e<sub>v</sub> = &#7745;<sub>in</sub>/(&rho;<sub>i</sub>V<sub>d,total</sub>(N/2)), &rho;<sub>i</sub> = P<sub>i</sub>/(RT<sub>i</sub>) (only if the simulator reports air flow)</td></tr>
+<tr><td>Cycles</td><td>&eta;<sub>Otto</sub> = 1 &minus; 1/r<sup>k&minus;1</sup> &nbsp;|&nbsp; isentropic: T<sub>2</sub>/T<sub>1</sub> = r<sup>k&minus;1</sup>, P<sub>2</sub>/P<sub>1</sub> = r<sup>k</sup></td></tr>
+<tr><td>First law &amp; polytropic</td><td>Q<sub>1&ndash;2</sub> &minus; W<sub>1&ndash;2</sub> = mc<sub>v</sub>(T<sub>2</sub>&minus;T<sub>1</sub>) &nbsp;|&nbsp; P<sub>2</sub>/P<sub>1</sub> = (V<sub>1</sub>/V<sub>2</sub>)<sup>n</sup>, T<sub>2</sub>/T<sub>1</sub> = (V<sub>1</sub>/V<sub>2</sub>)<sup>n&minus;1</sup> &nbsp;|&nbsp; W<sub>1&ndash;2</sub> = (P<sub>1</sub>V<sub>1</sub> &minus; P<sub>2</sub>V<sub>2</sub>)/(n&minus;1)</td></tr>
+</table></div>
+<p><b>What differs between engines:</b> forced induction raises bmep (formula unchanged; &eta;<sub>Otto</sub> still uses the geometric <i>r</i>); sleeve valves (Sabre, Centaurus) are modelled with poppet valves in the simulator, so declare it; fuel heating value q<sub>c</sub> is 43.5 MJ/kg for aviation gasoline engines and 44.0 MJ/kg for pump-gasoline engines, unless the simulator states otherwise. Diesel, Dual and Brayton cycles from the course are <i>not</i> used here because no engine in the pool is a diesel or two-stroke.</p>
+
+<h2>3. Approved Engine Pool (12 Engines)</h2>
+<p>Bore, stroke and cylinder count reproduce the published displacement. <b>Use the variant (mark) locked for your engine in the registry</b>; Appendix B lists the marks and the values students must cite.</p>
+<div class="wrap"><table>
+<tr><th>#</th><th>Engine</th><th>Layout</th><th>Cyl.</th><th>Bore &times; Stroke</th><th>Displ.</th><th>Layout-specific bottleneck to investigate</th></tr>
+<tr><td>1</td><td>Rolls-Royce Vulture</td><td>X-24, liquid-cooled</td><td>24</td><td>5.0 &times; 5.5 in</td><td>42.5 L</td><td>Crank loading and bearing failures; cooling of four banks</td></tr>
+<tr><td>2</td><td>Napier Sabre</td><td>H-24, sleeve valve</td><td>24</td><td>5.0 &times; 4.75 in</td><td>36.7 L</td><td>Sleeve friction and wear; geared twin crankshafts</td></tr>
+<tr><td>3</td><td>Napier Lion</td><td>W12 &ldquo;broad arrow&rdquo;</td><td>12</td><td>5.5 &times; 5.125 in</td><td>23.9 L</td><td>Three-bank breathing; cooling of the centre bank</td></tr>
+<tr><td>4</td><td>BRM P75 (H16)</td><td>H-16 (two flat-8s)</td><td>16</td><td>69.8 &times; 48.9 mm</td><td>3.0 L</td><td>Gear-coupled cranks, friction, weight, 10,000+ rpm</td></tr>
+<tr><td>5</td><td>Bugatti Type 45</td><td>U16, geared cranks</td><td>16</td><td>60 &times; 84 mm</td><td>3.8 L</td><td>Geared dual-crank friction, supercharger matching</td></tr>
+<tr><td>6</td><td>Ariel Square Four</td><td>Square-4, geared cranks</td><td>4</td><td>65 &times; 75 mm</td><td>1.0 L</td><td>Rear-cylinder overheating</td></tr>
+<tr><td>7</td><td>P&amp;W R-4360</td><td>28-cyl, 4-row radial</td><td>28</td><td>5.75 &times; 6.0 in</td><td>71.5 L</td><td>Rear-row cooling and head temperature</td></tr>
+<tr><td>8</td><td>Wright R-3350 (no turbo-compound)</td><td>18-cyl radial</td><td>18</td><td>6.125 &times; 6.3125 in</td><td>54.9 L</td><td>Valve and exhaust thermal limits; cooling-air distribution</td></tr>
+<tr><td>9</td><td>Bristol Centaurus</td><td>18-cyl radial, sleeve valve</td><td>18</td><td>5.75 &times; 7.0 in</td><td>53.6 L</td><td>Sleeve friction and thermal distortion</td></tr>
+<tr><td>10</td><td>BMW 801</td><td>14-cyl, 2-row radial</td><td>14</td><td>156 &times; 156 mm</td><td>41.8 L</td><td>Cooling-fan power draw versus cooling benefit</td></tr>
+<tr><td>11</td><td>Bugatti W16 (modern comparison)</td><td>W16, quad-turbo</td><td>16</td><td>86 &times; 86 mm</td><td>8.0 L</td><td>Heat rejection with four banks and four turbos</td></tr>
+<tr><td>12</td><td>Volkswagen W8 (modern comparison)</td><td>W8 (two VR4)</td><td>8</td><td>84 &times; 90.17 mm</td><td>4.0 L</td><td>Friction, balance and cost versus a conventional V8</td></tr>
+</table></div>
+
+<h2>4. Your Personal Parameter Card</h2>
+<p>Take the last three digits of your Student ID: <i>a</i> (hundreds), <i>b</i> (tens), <i>c</i> (ones). Print your card on page 1 of your report.</p>
+<div class="wrap"><table>
+<tr><th>Item</th><th>Rule</th><th>Used in</th></tr>
+<tr><td>Low-speed checkpoint f<sub>1</sub></td><td>0.40 + 0.04a (fraction of rated RPM)</td><td>Section 1</td></tr>
+<tr><td>Efficiency checkpoint f<sub>3</sub></td><td>0.60 + 0.03b (fraction of rated RPM)</td><td>Sections 2, 3</td></tr>
+<tr><td>Crank angle &theta;</td><td>15&deg; + 10&deg;&middot;c after TDC</td><td>Section 1</td></tr>
+<tr><td>Fallback rod ratio &epsilon;</td><td>0.28 + 0.01a, used <i>only</i> if no cited rod length exists</td><td>Section 1</td></tr>
+<tr><td>Hot-gas specific-heat ratio</td><td>k<sub>hot</sub> = 1.28 + 0.01c</td><td>Section 2</td></tr>
+<tr><td>Tuning track</td><td>c mod 4: 0 = valve timing, 1 = compression ratio, 2 = boost / manifold pressure, 3 = ignition timing and mixture</td><td>Section 3</td></tr>
+<tr><td>Design objective</td><td>(a+b+c) mod 3: 0 = max peak power, 1 = max torque at f<sub>3</sub>N<sub>rated</sub>, 2 = min bsfc at f<sub>3</sub>N<sub>rated</sub></td><td>Section 3</td></tr>
+<tr><td>First adjustment step</td><td>s<sub>1</sub> = (3 + b) percent of the stock value of your track variable</td><td>Section 3</td></tr>
+</table></div>
+<div class="box"><b>Card calculator.</b> Enter the last three digits of your Student ID:
+<input id="idin" maxlength="12" placeholder="e.g. 472"> <button type="button" id="go">Compute</button>
+<div id="out" class="wrap"></div></div>
+<p>If your track is not possible on your engine (for example the boost track on a naturally aspirated engine), run it as a &ldquo;what-if&rdquo; study and discuss in Section 3 why the original designers could not do it. If the simulator truly lacks the control, email the instructor before Day 3 for reassignment.</p>
+
+<h2>5. Simulator Approximation Declaration</h2>
+<p>Page 2 of your report states: (1) the cylinder count you simulated (<i>n<sub>sim</sub></i>). If the simulator cannot handle your engine&rsquo;s cylinder count, simulate the largest supported count with the same bore, stroke and <i>r</i>, then scale only <b>extensive</b> outputs (power, torque, fuel flow, air flow) by <i>n<sub>actual</sub>/n<sub>sim</sub></i> by hand. Intensive quantities (bmep, bsfc, &eta;<sub>b</sub>, imep, P-V diagram) do not scale. (2) How you represented unsupported features (sleeve valves, supercharger or turbo staging, multiple crankshafts, cooling). (3) Any simulator default that differs from your cited specification. An honest declaration earns credit; hiding a mismatch costs credit.</p>
+
+<h2>6. Execution Roadmap</h2>
+<div class="wrap"><table>
+<tr><th>Step</th><th>Task</th><th>Day</th></tr>
+<tr><td>1</td><td>Claim your engine in the registry; compute your Parameter Card; complete the Spec Table (Appendix A) with citations.</td><td>1</td></tr>
+<tr><td>2</td><td>Configure the baseline in the simulator and write the Approximation Declaration.</td><td>1</td></tr>
+<tr><td>3</td><td><b>Screenshot #1</b>: baseline setup with the daily verification code, Student ID and Full Name visible.</td><td>1</td></tr>
+<tr><td>4</td><td>Handwritten Section 1 calculations.</td><td>2</td></tr>
+<tr><td>5</td><td>Full-throttle dyno sweep, idle to redline; record peaks and fuel flow at f<sub>3</sub>N<sub>rated</sub>.</td><td>2</td></tr>
+<tr><td>6</td><td>Handwritten Section 2 calculations.</td><td>3</td></tr>
+<tr><td>7</td><td>Tuning study (at least five logged runs) and <b>Screenshot #2</b> (Stock vs. Tuned).</td><td>3&ndash;5</td></tr>
+<tr><td>8</td><td>Extract the P-V card (<b>Screenshot #3</b>), complete Section 4 by hand, write the reflection, merge and submit.</td><td>5&ndash;7</td></tr>
+</table></div>
+
+<h2>7. Report Sections and Grading (100 points)</h2>
+<h3>Section 1: Geometry, Kinematics and Baseline (15)</h3>
+<ul>
+<li>Screenshot #1 and completed Spec Table with citations (4).</li>
+<li>By hand, with unit conversions: V<sub>d</sub>, V<sub>d,total</sub>, V<sub>c</sub>; &Uacute;<sub>p</sub> at f<sub>1</sub>N<sub>rated</sub> and at N<sub>rated</sub> (6).</li>
+<li>At your assigned &theta;, at N<sub>rated</sub>: V(&theta;) and U<sub>p</sub>(&theta;) using the course slider-crank formulas (3).</li>
+<li>Check that your V<sub>d,total</sub> matches the published displacement within 1%, or explain why not (2).</li>
+</ul>
+<h3>Section 2: Performance Calculations (30)</h3>
+<ul>
+<li>Dyno peaks: power, torque, and the RPM of each (4).</li>
+<li>bmep at peak power, computed <b>both</b> ways (n<sub>R</sub>&Wdot;<sub>b</sub>/V<sub>d,total</sub>N and 4&pi;&tau;/V<sub>d,total</sub>), with the two values compared (6).</li>
+<li>bsfc and &eta;<sub>b</sub> at f<sub>3</sub>N<sub>rated</sub>, using the 3600/(bsfc&middot;q<sub>c</sub>) form and stating q<sub>c</sub> (8).</li>
+<li>Volumetric efficiency at f<sub>3</sub>N<sub>rated</sub> if the simulator reports air flow; otherwise a one-line explanation (3).</li>
+<li>&eta;<sub>Otto</sub> twice: with <i>k</i> = 1.4 and with your <i>k</i><sub>hot</sub>; state the gap to &eta;<sub>b</sub> in percentage points (6).</li>
+<li>Units, significant figures, boxed answers (3).</li>
+</ul>
+<h3>Section 3: Bottleneck and Tuning Challenge (25)</h3>
+<ul>
+<li>Bottleneck analysis tied to your track and objective, with at least one cited source (6).</li>
+<li>Tuning log, at least five runs. Run 1 changes your track variable by exactly s<sub>1</sub>; explain your reasoning before each later run; record power, torque, bsfc and peak cylinder pressure for every run (8).</li>
+<li>Constraint check: tuned peak cylinder pressure must not exceed 1.30 &times; the stock peak (a proxy for knock and structural limits) (3).</li>
+<li>Result: change in your objective as a percentage versus stock, with a one-paragraph engineering explanation (4).</li>
+<li>Screenshot #2 with code and credentials visible (4).</li>
+</ul>
+<h3>Section 4: Indicator Diagram, Loss Attribution and Reflection (30)</h3>
+<ul>
+<li>Screenshot #3: Cylinder 1 P-V diagram with code and credentials visible (3).</li>
+<li><b>imep by hand</b> (6): read at least 12 (V, P) points, integrate with the trapezoid rule, imep = W<sub>i</sub>/V<sub>d</sub>. State whether the value is net (with pumping loop) or gross.</li>
+<li><b>Compression-stroke analysis</b> (6): pick two points on the compression curve; find the polytropic exponent <i>n</i>; compute W<sub>1&ndash;2</sub> and, using the trapped mass m = P<sub>1</sub>V<sub>1</sub>/(RT<sub>1</sub>), the heat transfer Q<sub>1&ndash;2</sub> from the first law. State the direction of heat flow and compare <i>n</i> with <i>k</i>.</li>
+<li><b>Loss attribution</b> (5): &eta;<sub>m</sub> = bmep/imep, fmep = imep &minus; bmep, &eta;<sub>ind</sub> = &eta;<sub>b</sub>/&eta;<sub>m</sub>, then &eta;<sub>b</sub> = &eta;<sub>Otto</sub> &times; (&eta;<sub>ind</sub>/&eta;<sub>Otto</sub>) &times; &eta;<sub>m</sub> with your numbers; name the largest loss.</li>
+<li><b>250-word technical reflection</b> (10), prompt chosen by engine:
+<ul>
+<li><b>Prompt A (engines 1&ndash;10):</b> why was your layout superseded or limited? Address at least two real mechanisms (heat transfer through multi-bank jackets, friction from gearing and extra crankshafts, variable specific heats at high temperature, torsional vibration) and tie one claim to a number you computed.</li>
+<li><b>Prompt B (engines 11&ndash;12):</b> the layout survives only in niche products. Explain the trade-off against a conventional V or inline alternative and tie one claim to a number you computed.</li>
+<li>Marked on specificity to <b>your</b> engine and numbers (5), correct physics (3), clarity (2).</li>
+</ul></li>
+</ul>
+
+<h2>8. Integrity and Verification</h2>
+<ol>
+<li><b>Daily code:</b> a verification code is posted on Canvas each day at 8:00 AM. Every screenshot shows the code for the day it was taken, handwritten and beside your monitor, plus your Student ID and Full Legal Name. Write the date on the slip. Pasted or unwatermarked screenshots receive zero.</li>
+<li><b>Handwritten math:</b> all calculations are by hand (paper or stylus tablet). Typed math, equation editors and LaTeX are not accepted in calculation pages.</li>
+<li><b>Individual work:</b> identical checkpoints, tuning logs or P-V reading points across submissions will be reviewed. Discussing concepts is allowed; sharing numbers is not.</li>
+<li><b>Oral check:</b> a random sample, and any flagged submission, gets a 5-minute oral check on one handwritten calculation and one tuning decision from the student&rsquo;s own report.</li>
+<li><b>Citations:</b> specifications without a citation (title, page or table, year) lose credit.</li>
+</ol>
+
+<h2>9. Submission</h2>
+<p>Deadline: 7 days after announcement release. One combined PDF (typed text, watermarked screenshots, merged handwritten pages). File name: <code>ME3115_Midterm_[Lastname]_[EngineNumber].pdf</code>. Page order: (1) cover with Parameter Card, (2) Approximation Declaration and Spec Table, (3) Sections 1&ndash;4 with screenshots, (4) handwritten calculations, (5) references.</p>
+
+<h2>Appendix A: Spec Table (student completes)</h2>
+<div class="wrap"><table>
+<tr><th>Parameter</th><th>Value</th><th>Units</th><th>Source and page / table</th><th>Year</th></tr>
+<tr><td>Engine, variant (mark)</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Cylinders (actual / simulated)</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Bore b, stroke s</td><td></td><td>mm</td><td></td><td></td></tr>
+<tr><td>Compression ratio r</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Rated RPM and rated power</td><td></td><td>rpm, kW</td><td></td><td></td></tr>
+<tr><td>Connecting-rod length l (or fallback &epsilon;)</td><td></td><td>mm</td><td></td><td></td></tr>
+<tr><td>Induction type and boost</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Fuel and q<sub>c</sub></td><td></td><td>MJ/kg</td><td></td><td></td></tr>
+<tr><td>Published total displacement</td><td></td><td>L</td><td></td><td></td></tr>
+</table></div>
+
+<h2>Appendix B: Marks (Variants) of Each Engine and Suggested Locked Variant</h2>
+<div class="box warn"><b>Instructor note:</b> these were gathered from public sources (Wikipedia, Aircraft Engine Historical Society, Grace&rsquo;s Guide, Bugatti Trust and similar). Sources disagree on some values, which is noted below. Confirm the locked variant, rated RPM and compression ratio against a primary source before release. Items marked <b>(from memory)</b> were not checked online.</div>
+<div class="wrap"><table>
+<tr><th>#</th><th>Engine</th><th>Marks / variants</th><th>Suggested lock, with values found</th></tr>
+<tr><td>1</td><td>Rolls-Royce Vulture</td><td>Mk I to Mk V. II (multi-engine, separate five-drive auxiliary gearbox), IV (fighter, integral gearbox), V (fighter, later development)</td><td><b>Vulture II</b>: CR 6.0:1, single-stage two-speed supercharger. Takeoff about 1,800 hp at 3,200 rpm (forum-cited; verify). Derated in service to about 1,450&ndash;1,550 hp.</td></tr>
+<tr><td>2</td><td>Napier Sabre</td><td>I, II, IIA, IIB, IIC, III, IV, V, VA, VI, VII</td><td><b>Sabre IIB</b>: CR 7.0:1, 2,420 bhp at 3,850 rpm (sea level). Others: Sabre I 2,060 hp at 3,700 rpm; VII about 3,055 hp at 3,850 rpm, 3,500 hp with water-methanol.</td></tr>
+<tr><td>3</td><td>Napier Lion</td><td>I, II/IIA/IIB, III, V, VA, VI, VII/VIIA, VIIB, VIID, VIII, XI, plus marine Sea Lion. CR varies from 5.0:1 to 10.0:1 by mark.</td><td><b>Lion Series V</b> (naturally aspirated): CR 5.8:1, 450 hp at 2,000 rpm, 502 hp at 2,200 rpm (AEHS). Advanced option: <b>VIID</b>, supercharged, 1,350 bhp at 3,600 rpm (CR not found). VIIB (1927): 875&ndash;900 bhp, geared.</td></tr>
+<tr><td>4</td><td>BRM H16</td><td>Single engine type, P75. 32-valve version (390 bhp at 10,250 rpm); 64-valve version (420 bhp at 10,500 rpm); a separate 4.2 L version for Lotus at Indianapolis</td><td><b>P75 3.0 L, 32-valve</b>. Published bore/stroke is <b>69.8 &times; 48.9 mm</b> (see correction in the cover note). CR not found: instructor must supply.</td></tr>
+<tr><td>5</td><td>Bugatti Type 45</td><td>Type 45 (3.8 L, 60 &times; 84 mm, about 250 bhp, prudent limit 5,000 rpm); Type 47 (3.0 L, 60 &times; 66 mm, about 200 bhp). Only 2 cars built; about 5 U16 engines in all.</td><td><b>Type 45, 3.8 L</b>. CR not found. This is the weakest-documented engine in the pool: supply the data or drop it.</td></tr>
+<tr><td>6</td><td>Ariel Square Four</td><td>4F 500/600 cc (1931&ndash;39); 4G iron 995 cc (1937&ndash;48); Mk I alloy (1949&ndash;53); Mk II four-pipe (1953&ndash;59)</td><td><b>Mk II (997 cc)</b>: 42 bhp at 5,800 rpm. CR is 7.2:1 in two sources but 7.8:1 in one; use this conflict as a citation exercise. Mk I: 6.0:1, 34.5 bhp at 5,400 rpm.</td></tr>
+<tr><td>7</td><td>P&amp;W R-4360</td><td>-3, -4, -17, -20, -21, -35, -41, -45, -47, -51 VDT, -53, -55/-57 VDT, -59, -63, B3, B6, CB2</td><td><b>R-4360-20</b>: CR 6.7:1, 3,500 hp, max 2,700 rpm. The -57 VDT used 7.5:1 and 4,300 hp; -53 is 3,800 hp with direct fuel injection.</td></tr>
+<tr><td>8</td><td>Wright R-3350</td><td>-5, -8, -13, -21, -23, -24W, -26W, -30W/WA, -32W, -34, -35A, -41, -42WA, -53, -57, -59, -85, -89A, -93W. Turbo-compound versions: -30W, -32W, -34, -38, -85, -89, -91.</td><td><b>R-3350-23</b> (B-29, no turbo-compound): CR 6.85:1, 2,200 hp at 2,800 rpm. Do <b>not</b> assign a turbo-compound variant, because the turbine recovery stage is not modelled.</td></tr>
+<tr><td>9</td><td>Bristol Centaurus</td><td>34 variants: Centaurus I (2,000 hp) up to 663 (2,405 hp); 57, 58, 59, 70, 100, 130; 170/173/660&ndash;662 (2,625 hp); 175</td><td><b>Centaurus VII</b>: CR 7.2:1, 100/130 fuel, direct injection, 5.75 &times; 7.0 in, 3,270 in&sup3;. Rated RPM not found: instructor must supply. (The 6.25 &times; 7.5 in Orion was a different engine.)</td></tr>
+<tr><td>10</td><td>BMW 801</td><td>A, B, C (C-1, C-2), L, D (D-1, D-2), E, F, G, H, Q, R, S, J</td><td><b>801D-2</b> (most produced): CR 6.5:1, 100-octane fuel, 1,730 PS takeoff (1,700 for D-1). Rated RPM not found (from memory about 2,700): supply it.</td></tr>
+<tr><td>11</td><td>Bugatti W16</td><td>Veyron 16.4 (1,001 PS), Veyron Super Sport / Vitesse (1,200 PS), Chiron (1,500 PS), Chiron Super Sport and Centodieci (1,600 PS), Divo, W16 Mistral, Bolide (modified)</td><td><b>Veyron 16.4</b> <b>(from memory, verify)</b>: 86 &times; 86 mm, 8.0 L, about 1,001 PS at 6,000 rpm, CR about 8.5:1.</td></tr>
+<tr><td>12</td><td>Volkswagen W8</td><td>One production version, 4.0 L, in the Passat (2001&ndash;2004)</td><td><b>W8 4.0</b> <b>(from memory, verify)</b>: 84 &times; 90.17 mm, about 275 PS at 6,000 rpm, CR about 10.8:1.</td></tr>
+</table></div>
+
+<h2>Appendix C: Instructor Pre-Release Checklist (remove before distributing)</h2>
+<ol>
+<li><b>Test the simulator</b> for cylinder-count limits, controls for bore, stroke, <i>r</i>, valve timing, boost, ignition and mixture, and outputs for fuel flow (or bsfc) and the Cylinder 1 P-V card. Edit Sections 4 and 5 for what is missing.</li>
+<li><b>Lock one variant per engine</b> in the registry (Appendix B), with rated RPM, compression ratio, fuel and rod length.</li>
+<li><b>Pre-run one engine</b> using a sample card to confirm the workload, that a step of s<sub>1</sub> produces a measurable response, and that the 1.30&times; pressure limit is reachable.</li>
+<li><b>Card collisions:</b> students whose last three digits match get identical cards; shift the second student&rsquo;s <i>a</i> by +1.</li>
+<li><b>AI detectors</b> are unreliable. This handout relies on individualized numbers and the oral check instead of detector flags.</li>
+</ol>
+
+<script>
+(function(){
+ var T=['Valve timing','Compression ratio','Boost / manifold pressure','Ignition timing and mixture'];
+ var O=['Maximize peak power','Maximize torque at f3 x N_rated','Minimize bsfc at f3 x N_rated'];
+ function run(){
+  var v=document.getElementById('idin').value.replace(/\D/g,'').slice(-3),o=document.getElementById('out');
+  if(v.length<3){o.innerHTML='<p>Enter at least three digits.</p>';return;}
+  var a=+v[0],b=+v[1],c=+v[2],f=function(x,n){return x.toFixed(n)};
+  var rows=[['f1',f(0.40+0.04*a,2)+' x N_rated'],['f3',f(0.60+0.03*b,2)+' x N_rated'],['Crank angle',(15+10*c)+' deg ATDC'],
+   ['Fallback rod ratio (only if no cited l)',f(0.28+0.01*a,2)],['k_hot',f(1.28+0.01*c,2)],['Tuning track',c%4+' = '+T[c%4]],
+   ['Design objective',(a+b+c)%3+' = '+O[(a+b+c)%3]],['First step s1',(3+b)+' % of stock value']];
+  var h='<table><tr><th>Item</th><th>Your value</th></tr>';
+  rows.forEach(function(r){h+='<tr><td>'+r[0]+'</td><td>'+r[1]+'</td></tr>'});
+  o.innerHTML=h+'</table>';
+ }
+ document.getElementById('go').addEventListener('click',run);
+})();
+</script>
+</body>
+</html>
