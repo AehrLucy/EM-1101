@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Applications of Linear Equations - Asynchronous Activity</title>
+    <!-- Tailwind CSS CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            color: #1f2937;
+            line-height: 1.6;
+        }
+        .math-expr {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            background-color: #f8fafc;
+            padding: 0.15rem 0.4rem;
+            border-radius: 0.25rem;
+            border: 1px solid #e2e8f0;
+            color: #0f172a;
+            font-size: 0.95em;
+        }
+    </style>
+</head>
+<body class="py-8 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto bg-white shadow-xl rounded-2xl overflow-hidden border border-gray-200">
+        
+        <!-- 1. Header / Course Branding -->
+        <header class="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white p-6 sm:p-8">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <span class="inline-block bg-blue-600 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider mb-2">Asynchronous Module Activity</span>
+                    <h1 class="text-2xl sm:text-3xl font-bold tracking-tight">Applications of Linear Equations</h1>
+                    <p class="text-blue-200 text-sm mt-1">GEM 01 / Algebra and Trigonometry</p>
+                </div>
+                <div class="bg-blue-800/60 backdrop-blur-sm border border-blue-600/40 p-4 rounded-xl text-xs max-w-xs shadow-inner">
+                    <p class="font-bold text-amber-300 uppercase tracking-wide mb-1">📋 Submission Instruction:</p>
+                    <p class="text-gray-100">Write your complete and organized solutions in a <span class="font-semibold text-white">clean notebook</span>, then upload a scanned PDF of your work to the Canvas assignment drop-box.</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- 2. Relevance to Calculus Confirmation -->
+        <section class="p-6 sm:p-8 bg-blue-50/50 border-b border-blue-100">
+            <div class="flex items-start gap-4">
+                <div class="p-3 bg-blue-600 text-white rounded-xl shadow-md shrink-0">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="text-lg font-bold text-blue-900 mb-1">Why This Matters for Calculus</h2>
+                    <p class="text-sm text-gray-700 leading-relaxed">
+                        Mastering word problems and linear modeling is a vital prerequisite for Calculus. In higher-level mathematics, you will constantly translate real-world scenarios into mathematical functions. These exact algebraic translation skills form the bedrock for setting up <strong>optimization constraints</strong> (finding maximum/minimum values), <strong>related rates models</strong> (calculating how rates change with respect to time, like planes meeting or pumps filling pools), and crafting linear approximations.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Introductory Lecture & Problem-Solving Guide -->
+        <section class="p-6 sm:p-8 border-b border-gray-200 bg-white">
+            <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <span class="text-blue-600">📖</span> Mini-Lecture: Step-by-Step Problem Solving Guide
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm">
+                    <span class="text-xs font-bold text-indigo-600 uppercase">Step 1</span>
+                    <h3 class="font-semibold text-gray-900">Understand & Identify Variables</h3>
+                    <p class="text-sm text-gray-600 mt-1">Read the problem carefully. Identify what is unknown and assign clear variable names (e.g., let <span class="math-expr">w</span> = width).</p>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm">
+                    <span class="text-xs font-bold text-indigo-600 uppercase">Step 2</span>
+                    <h3 class="font-semibold text-gray-900">Translate Words to Equations</h3>
+                    <p class="text-sm text-gray-600 mt-1">Convert descriptive sentences into algebraic equations using known formulas (perimeter, rates, mixtures, motion).</p>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm">
+                    <span class="text-xs font-bold text-indigo-600 uppercase">Step 3</span>
+                    <h3 class="font-semibold text-gray-900">Solve the Equation</h3>
+                    <p class="text-sm text-gray-600 mt-1">Isolate the variable step-by-step using fundamental algebraic properties (addition/multiplication principles).</p>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm">
+                    <span class="text-xs font-bold text-indigo-600 uppercase">Step 4</span>
+                    <h3 class="font-semibold text-gray-900">Check & Interpret in Context</h3>
+                    <p class="text-sm text-gray-600 mt-1">Verify if your numerical answer makes physical sense (e.g., can time or distance be negative? Do units match?).</p>
+                </div>
+            </div>
+
+            <!-- Keyword Translation Table -->
+            <div class="bg-amber-50/60 border border-amber-200 rounded-xl p-4">
+                <h4 class="text-sm font-bold text-amber-900 mb-2 uppercase tracking-wide">Common Keyword Translation Reference</h4>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs text-amber-950">
+                    <div>• <strong>"More than", "Sum", "Increased by"</strong> <br>&rarr; Addition (<span class="math-expr">+</span>)</div>
+                    <div>• <strong>"Less than", "Difference", "Decreased"</strong> <br>&rarr; Subtraction (<span class="math-expr">-</span>)</div>
+                    <div>• <strong>"Per", "At a rate of", "Product"</strong> <br>&rarr; Multiplication / Division</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Activity Problems -->
+        <section class="p-6 sm:p-8 bg-gray-50/50">
+            <h2 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                <span class="text-blue-600">✍️</span> Practice Exercises (12 Problems)
+            </h2>
+
+            <div class="space-y-6">
+                <!-- Problem 1 -->
+                <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm relative">
+                    <span class="absolute top-4 right-4 bg-gray-100 text-gray-600 text-xs font-bold px-2.5 py-1 rounded-full">Geometry / Perimeter</span>
+                    <p class="font-medium text-gray-900 pr-16">1. If the perimeter of a rectangle is 68 meters and the length is 14 meters more than the width, what are dimensions of the rectangle?</p>
+                </div>
+
+                <!-- Problem 2 -->
+                <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm relative">
+                    <span class="absolute top-4 right-4 bg-gray-100 text-gray-600 text-xs font-bold px-2.5 py-1 rounded-full">Number Relations</span>
+                    <p class="font-medium text-gray-900 pr-16">2. The sum of two numbers is <span class="math-expr">-4</span> and their difference is 6. What are the numbers?</p>
+                </div>
+
+                <!-- Problem 3 -->
+                <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm relative">
+                    <span class="absolute top-4 right-4 bg-gray-100 text-gray-600 text-xs font-bold px-2.5 py-1 rounded-full">Work Rate</span>
+                    <p class="font-medium text-gray-900 pr-16">3. If one pump can fill a pool in 16 hours and if two pumps can fill the pool in 6 hours, how fast can the second pump fill the pool?</p>
+                </div>
+
+                <!-- Problem 4 -->
+                <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm relative">
+                    <span class="absolute top-4 right-4 bg-gray-100 text-gray-600 text-xs font-bold px-2.5 py-1 rounded-full">Financial / Markup</span>
+                    <p class="font-medium text-gray-900 pr-16">4. A widget is being sold in a store for $135.40 and has been marked up 7%. How much did the store pay for the widget?</p>
+                </div>
+
+                <!-- Problem 5 -->
+                <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm relative">
+                    <span class="absolute top-4 right-4 bg-gray-100 text-gray-600 text-xs font-bold px-2.5 py-1 rounded-full">Financial / Discount</span>
+                    <p class="font-medium text-gray-900 pr-16">5. A store is having a 30% off sale and one item is now being sold for $9.95. What was the original price of the item?</p>
+                </div>
+
+                <!-- Problem 6 -->
+                <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm relative">
+                    <span class="absolute top-4 right-4 bg-gray-100 text-gray-600 text-xs font-bold px-2.5 py-1 rounded-full">Uniform Motion</span>
+                    <p class="font-medium text-gray-900 pr-16">6. Two planes start out 2800 km apart and move towards each other meeting after 3.5 hours. One plane flies at 75 km/hour slower than the other plane. What was the speed of each plane?</p>
+                </div>
+
+                <!-- Problem 7 -->
+                <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm relative">
+                    <span class="absolute top-4 right-4 bg-gray-100 text-gray-600 text-xs font-bold px-2.5 py-1 rounded-full">Uniform Motion</span>
+                    <p class="font-medium text-gray-900 pr-16">7. Mike starts out 35 feet in front of Kim and they both start moving towards the right at the same time. Mike moves at 2 ft/sec while Kim moves at 3.4 ft/sec. How long will it take for Kim to catch up with Mike?</p>
+                </div>
+
+                <!-- Problem 8 -->
+                <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm relative">
+                    <span class="absolute top-4 right-4 bg-gray-100 text-gray-600 text-xs font-bold px-2.5 py-1 rounded-full">Work Rate</span>
+                    <p class="font-medium text-gray-900 pr-16">8. A pump can empty a pool in 7 hours and a different pump can empty the same pool in 12 hours. How long does it take for both pumps working together to empty the pool?</p>
+                </div>
+
+                <!-- Problem 9 -->
+                <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm relative">
+                    <span class="absolute top-4 right-4 bg-gray-100 text-gray-600 text-xs font-bold px-2.5 py-1 rounded-full">Work Rate</span>
+                    <p class="font-medium text-gray-900 pr-16">9. John can paint a house in 28 hours. John and Dave can paint the house in 17 hours working together. How long would it take Dave to paint the house by himself?</p>
+                </div>
+
+                <!-- Problem 10 -->
+                <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm relative">
+                    <span class="absolute top-4 right-4 bg-gray-100 text-gray-600 text-xs font-bold px-2.5 py-1 rounded-full">Mixture Solution</span>
+                    <p class="font-medium text-gray-900 pr-16">10. How much of a 20% acid solution should we add to 20 gallons of a 42% acid solution to get a 35% acid solution?</p>
+                </div>
+
+                <!-- Problem 11 -->
+                <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm relative">
+                    <span class="absolute top-4 right-4 bg-gray-100 text-gray-600 text-xs font-bold px-2.5 py-1 rounded-full">Mixture Solution</span>
+                    <p class="font-medium text-gray-900 pr-16">11. We need 100 liters of a 25% saline solution and we only have a 14% solution and a 60% solution. How much of each should we mix together to get the 100 liters of the 25% solution?</p>
+                </div>
+
+                <!-- Problem 12 -->
+                <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm relative">
+                    <span class="absolute top-4 right-4 bg-gray-100 text-gray-600 text-xs font-bold px-2.5 py-1 rounded-full">Geometry / Fencing</span>
+                    <p class="font-medium text-gray-900 pr-16">12. We want to fence in a field whose length is twice the width and we have 80 feet of fencing material. If we use all the fencing material what would the dimensions of the field be?</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. Answer Key (Collapsible / Toggle Section) -->
+        <section class="p-6 sm:p-8 bg-white border-t border-gray-200">
+            <div class="border border-amber-300 bg-amber-50/50 rounded-2xl p-6">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
+                    <div>
+                        <h3 class="text-lg font-bold text-amber-900 flex items-center gap-2">
+                            <span>⚠️</span> Final Answer Key
+                        </h3>
+                        <p class="text-xs text-amber-800 mt-1">Do not open until you have attempted all problems. Final answers only (no solutions provided).</p>
+                    </div>
+                    <button onclick="toggleAnswerKey()" id="toggleBtn" class="bg-amber-600 hover:bg-amber-700 text-white font-medium text-sm px-5 py-2.5 rounded-xl shadow transition duration-200">
+                        Show Answer Key
+                    </button>
+                </div>
+
+                <!-- Hidden Answer Container -->
+                <div id="answerContainer" class="hidden mt-6 pt-6 border-t border-amber-200">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div class="bg-white p-3 rounded-lg border border-amber-200 shadow-sm">
+                            <span class="font-bold text-amber-900">1.</span> Width = 10 m, Length = 24 m
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border border-amber-200 shadow-sm">
+                            <span class="font-bold text-amber-900">2.</span> Numbers are 1 and -5
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border border-amber-200 shadow-sm">
+                            <span class="font-bold text-amber-900">3.</span> Approx. 9.6 hours (or $\frac{48}{5}$ hours)
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border border-amber-200 shadow-sm">
+                            <span class="font-bold text-amber-900">4.</span> $126.54
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border border-amber-200 shadow-sm">
+                            <span class="font-bold text-amber-900">5.</span> $14.21
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border border-amber-200 shadow-sm">
+                            <span class="font-bold text-amber-900">6.</span> Speeds: 375 km/h and 450 km/h
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border border-amber-200 shadow-sm">
+                            <span class="font-bold text-amber-900">7.</span> 25 seconds
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border border-amber-200 shadow-sm">
+                            <span class="font-bold text-amber-900">8.</span> Approx. 4.38 hours (or $\frac{84}{19}$ hours)
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border border-amber-200 shadow-sm">
+                            <span class="font-bold text-amber-900">9.</span> Approx. 43.56 hours (or $\frac{476}{11}$ hours)
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border border-amber-200 shadow-sm">
+                            <span class="font-bold text-amber-900">10.</span> 14 gallons
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border border-amber-200 shadow-sm">
+                            <span class="font-bold text-amber-900">11.</span> 76 liters of 14% solution & 24 liters of 60% solution
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border border-amber-200 shadow-sm">
+                            <span class="font-bold text-amber-900">12.</span> Width = 13.33 ft ($\frac{40}{3}$ ft), Length = 26.67 ft ($\frac{80}{3}$ ft)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-gray-100 p-6 text-center text-xs text-gray-500 border-t border-gray-200">
+            <p>Applications of Linear Equations Activity &bull; Designed for Canvas LMS Integration</p>
+        </footer>
+
+    </div>
+
+    <script>
+        function toggleAnswerKey() {
+            const container = document.getElementById('answerContainer');
+            const btn = document.getElementById('toggleBtn');
+            if (container.classList.contains('hidden')) {
+                container.classList.remove('hidden');
+                btn.textContent = 'Hide Answer Key';
+                btn.classList.remove('bg-amber-600', 'hover:bg-amber-700');
+                btn.classList.add('bg-slate-700', 'hover:bg-slate-800');
+            } else {
+                container.classList.add('hidden');
+                btn.textContent = 'Show Answer Key';
+                btn.classList.remove('bg-slate-700', 'hover:bg-slate-800');
+                btn.classList.add('bg-amber-600', 'hover:bg-amber-700');
+            }
+        }
+    </script>
+</body>
+</html>
