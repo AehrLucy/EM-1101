@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ME 3115 Engine Bench</title>
+<style>
+:root{--bg:#fff;--fg:#1c2330;--mut:#5b6575;--line:#d8dde6;--acc:#1f4e8c;--soft:#f2f5fa;--p:#1f4e8c;--t:#c4570a}
+@media(prefers-color-scheme:dark){:root{--bg:#14181f;--fg:#e6e9ef;--mut:#9aa4b5;--line:#2c3441;--acc:#7fb0ee;--soft:#1c222c;--p:#7fb0ee;--t:#ffa05a}}
+html{background:var(--bg)}body{margin:0;font:14px/1.45 system-ui,sans-serif;color:var(--fg)}
+header,main{max-width:1200px;margin:0 auto;padding:10px 14px}
+h1{font-size:1.25rem;margin:.2em 0}h3{font-size:.95rem;margin:.8em 0 .3em;color:var(--acc)}
+.note{background:var(--soft);border-left:4px solid var(--acc);padding:6px 10px;font-size:.85rem;color:var(--mut)}
+.wm{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}.wm label{font-size:.8rem;color:var(--mut)}
+input,select,button{font:inherit;padding:3px 6px;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--fg)}
+button{background:var(--acc);color:var(--bg);border:0;padding:5px 12px;cursor:pointer}button.s{background:var(--soft);color:var(--fg);border:1px solid var(--line)}
+main{display:grid;grid-template-columns:300px 1fr;gap:14px}@media(max-width:820px){main{grid-template-columns:1fr}}
+.f{display:grid;grid-template-columns:1fr 92px;gap:3px 6px;align-items:center}.f label{font-size:.82rem}
+table{border-collapse:collapse;width:100%;font-size:.84rem}td,th{border-bottom:1px solid var(--line);padding:3px 6px;text-align:left}td:last-child{text-align:right;font-variant-numeric:tabular-nums}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:12px}svg{width:100%;height:auto;background:var(--bg);border:1px solid var(--line)}
+svg text{fill:var(--fg);font:11px system-ui}.knock{color:#c0392b;font-weight:600}
+</style></head><body>
+<header>
+<h1>ME 3115 Engine Bench <span style="font-weight:400;color:var(--mut)">(free teaching model)</span></h1>
+<div class="note">A simplified model built on the course formulas (cold-air constants, polytropic compression and expansion, constant-volume heat release, Chen&ndash;Flynn-type friction). It is <b>not a validated simulator</b>: use it to compare, tune and explain trends, and always cite your own engine data. Default boost and friction values are placeholders; replace them with cited values.</div>
+<div class="wm"><label>Name <input id="wn" size="18"></label><label>Student ID <input id="wi" size="10"></label><label>Daily code <input id="wc" size="8"></label><label>Date <input id="wd" type="date"></label></div>
+</header>
+<main>
+<section><h3>Engine</h3><select id="pre" style="width:100%"></select>
+<h3>Parameters</h3><div class="f" id="form"></div>
+<div class="f" style="margin-top:4px"><label>Induction</label><select id="sc"><option value="none">None (NA)</option><option value="mech">Mechanical supercharger</option><option value="turbo">Turbocharger</option></select>
+<label>Fuel</label><select id="fuel"><option value="avgas">Aviation gasoline (LHV 43.5)</option><option value="pump">Pump gasoline (LHV 44.0)</option></select></div>
+<h3>Operating point</h3><div class="f"><label>Evaluate at RPM</label><input id="rpm" type="number" step="10"></div>
+<p><button id="run">Run</button> <button class="s" id="stock">Save as STOCK</button> <button class="s" id="clr">Clear stock</button></p>
+</section>
+<section>
+<div class="cards"><div><h3>Dyno sweep (full throttle)</h3><div id="dyno"></div><div id="pk" class="note"></div></div>
+<div><h3>Cylinder P-V indicator card (at evaluation RPM)</h3><div id="pv"></div></div></div>
+<h3>Results at evaluation RPM</h3><div class="cards"><table id="res1"></table><table id="res2"></table></div>
+<details><summary>P-V points for hand integration (V in cm&sup3;, P in bar)</summary><div id="pts" style="columns:3;font-size:.8rem"></div></details>
+<details open><summary>Model equations</summary><div style="font-size:.82rem;color:var(--mut)">
+V<sub>d</sub>=(&pi;/4)b&sup2;s; V<sub>c</sub>=V<sub>d</sub>/(r&minus;1); &Uacute;<sub>p</sub>=2sN. Charge: m<sub>a</sub>=e<sub>v</sub>&rho;<sub>i</sub>V<sub>d</sub>, &rho;<sub>i</sub>=P<sub>man</sub>/(RT<sub>i</sub>), m<sub>f</sub>=m<sub>a</sub>/(&lambda;&middot;14.7). Compression P<sub>2</sub>=P<sub>1</sub>r<sup>n<sub>c</sub></sup>; heat release at constant volume with c<sub>v</sub>=R/(k<sub>hot</sub>&minus;1); expansion P<sub>4</sub>=P<sub>3</sub>r<sup>&minus;n<sub>e</sub></sup>; W=&Sigma;(P<sub>a</sub>V<sub>a</sub>&minus;P<sub>b</sub>V<sub>b</sub>)/(n&minus;1). imep=W/V<sub>d</sub>&minus;pmep; bmep=imep&minus;fmep&minus;(supercharger drive); &Wdot;<sub>b</sub>=bmep&middot;V<sub>d,total</sub>N/2; bsfc=&#7745;<sub>f</sub>/&Wdot;<sub>b</sub>; &eta;<sub>b</sub>=1/(bsfc&middot;q<sub>c</sub>). Ignition, knock (end-gas temperature vs octane), heat-loss and combustion-efficiency factors scale the heat released.</div></details>
+</section></main>
+<script>
+const $=i=>document.getElementById(i),R=287,AF=14.7,HP=745.7;
+const F=[['n','Cylinders',24,1],['bore','Bore (mm)',127,.1],['stroke','Stroke (mm)',139.7,.1],['r','Compression ratio',6,.05],['Nr','Rated RPM',3200,10],['Tamb','Ambient T (°C)',15,1],['Pamb','Ambient P (bar)',1.013,.001],['boost','Manifold pressure ratio (abs)',1.4,.01],['ic','Intercooler effectiveness (0-1)',.5,.05],['oct','Fuel octane',100,1],['lam','Mixture λ',1,.01],['adv','Spark advance (°BTDC)',25,1],['evPk','Peak vol. eff. (%)',92,1],['evRpm','VE peak at (% of rated rpm)',80,1],['khot','Hot-gas k',1.33,.01],['nc','Compression exponent n_c',1.32,.01],['ne','Expansion exponent n_e',1.27,.01],['hl','Heat loss at rated (%)',20,1],['fm','Friction multiplier',1,.05]];
+// name,n,bore,stroke,r,Nr,boost,sc,ic,oct,fuel,published hp
+const PR=[['Rolls-Royce Vulture II (X-24)',24,127,139.7,6,3200,1.4,'mech',.5,100,'avgas',1800],['Napier Sabre IIB (H-24)',24,127,120.65,7,3850,1.5,'mech',.5,100,'avgas',2420],['Napier Lion Series V (W12)',12,139.7,130.175,5.8,2000,1,'none',0,87,'avgas',450],['BRM P75 (H16), CR assumed',16,69.8,48.9,11,10250,1,'none',0,100,'pump',390],['Bugatti Type 45 (U16), CR assumed',16,60,84,6,5000,1.3,'mech',0,87,'pump',250],['Ariel Square Four Mk II',4,65,75,7.2,5800,1,'none',0,85,'pump',42],['P&W R-4360-20 (28-cyl)',28,146.05,152.4,6.7,2700,1.6,'mech',.5,115,'avgas',3500],['Wright R-3350-23',18,155.575,160.3375,6.85,2800,1.5,'mech',.5,100,'avgas',2200],['Bristol Centaurus VII',18,146.05,177.8,7.2,2700,1.5,'mech',.5,100,'avgas',0],['BMW 801D-2',14,156,156,6.5,2700,1.5,'mech',.5,100,'avgas',1706],['Bugatti W16 Veyron 16.4',16,86,86,9,6000,2,'turbo',.8,98,'pump',987],['VW W8 4.0 (Passat)',8,84,90.17,10.8,6000,1,'none',0,95,'pump',271],['P&W R-2800 (compare with simulator preset)',18,146.1,152.4,6.65,2700,1.57,'mech',.5,130,'avgas',2000],['Custom',4,80,80,10,6000,1,'none',0,95,'pump',0]];
+$('form').innerHTML=F.map(f=>`<label>${f[1]}</label><input id="${f[0]}" type="number" step="${f[3]}" value="${f[2]}">`).join('');
+$('pre').innerHTML=PR.map((p,i)=>`<option value="${i}">${p[0]}</option>`).join('');
+let pubHp=0,stock=null;
+function load(i){const p=PR[i],k=['n','bore','stroke','r','Nr','boost','','ic','oct'];[['n',1],['bore',2],['stroke',3],['r',4],['Nr',5],['boost',6],['ic',8],['oct',9]].forEach(a=>$(a[0]).value=p[a[1]]);$('sc').value=p[7];$('fuel').value=p[10];pubHp=p[11];$('rpm').value=Math.round(p[5]*0.9)}
+function P(){const o={};F.forEach(f=>o[f[0]]=parseFloat($(f[0]).value));o.evPk/=100;o.evRpm/=100;o.hl/=100;o.sc=$('sc').value;o.qc=$('fuel').value=='avgas'?43.5e6:44e6;if(o.sc=='none')o.boost=1;return o}
+function model(p,N){
+ const D=p.bore/1e3,S=p.stroke/1e3,Vd1=Math.PI/4*D*D*S,Vc=Vd1/(p.r-1),Vdt=Vd1*p.n,x=N/p.Nr,Up=2*S*N/60;
+ const Pa=p.Pamb*1e5,Ta=p.Tamb+273.15,pi=p.boost;
+ const Tcomp=Ta*(1+(Math.pow(pi,.2857)-1)/.7),Ti=Ta+(Tcomp-Ta)*(1-p.ic);
+ const Pman=Pa*pi*(1-.08*x*x),Pex=p.sc=='turbo'?Pman*.95:Pa*(1+.05*x*x);
+ const rho=Pman/(R*Ti),ev=Math.max(.3,Math.min(1.1,p.evPk*(1-1.1*Math.pow(x-p.evRpm,2))));
+ const ma=ev*rho*Vd1,mf=ma/(p.lam*AF),m=ma+mf,V1=Vd1+Vc,P1=Pman,T1=P1*V1/(m*R);
+ const P2=P1*Math.pow(p.r,p.nc),T2=T1*Math.pow(p.r,p.nc-1);
+ let ec=.97*(p.lam>=1?1:.4+.6*p.lam);if(p.lam>1.1)ec*=Math.max(.3,1-1.5*(p.lam-1.1));
+ const mbt=14+14*x,fi=Math.max(.5,1-4e-4*Math.pow(p.adv-mbt,2));
+ const Tk=760+5*(p.oct-90),ex=Math.max(0,T2-Tk),fk=Math.max(.6,1-.004*ex);
+ const hl=Math.min(.35,p.hl/Math.sqrt(Math.max(x,.25))),Qin=mf*p.qc*ec,Qg=Qin*fi*fk*(1-hl);
+ const cvh=R/(p.khot-1),T3=T2+Qg/(m*cvh),P3=P2*T3/T2,P4=P3*Math.pow(1/p.r,p.ne);
+ const Wg=(P1*V1-P2*Vc)/(p.nc-1)+(P3*Vc-P4*V1)/(p.ne-1);
+ const imepg=Wg/Vd1/1e5,pmep=(Pex-Pman)/1e5,imepn=imepg-pmep;
+ const fmep=(.35+.004*P3/1e5+.07*Up+7e-4*Up*Up)*p.fm;
+ const scm=p.sc=='mech'?ma*1005*Ta*(Math.pow(pi,.2857)-1)/(.7*.9)/Vd1/1e5:0;
+ const bmep=imepn-fmep-scm,Pb=bmep*1e5*Vdt*(N/60)/2,tq=Pb/(2*Math.PI*N/60);
+ const mdf=p.n*mf*(N/60)/2,bsfc=Pb>0?mdf/Pb*3.6e9:NaN,eb=Pb>0?Pb/(mdf*p.qc):NaN;
+ return{N,x,Up,Vd1,Vc,Vdt,V1,Pman,Pex,Ti,rho,ev,ma,mf,m,T1,T2,T3,P1,P2,P3,P4,ec,fi,fk,ex,hl,Wg,imepg,pmep,imepn,fmep,scm,bmep,Pb,hp:Pb/HP,kw:Pb/1e3,tq,mdf,bsfc,eb,mdair:p.n*ma*(N/60)/2,afr:ma/mf,etaG:Wg/(mf*p.qc),etaO:1-Math.pow(p.r,-.4),etaOh:1-Math.pow(p.r,1-p.khot),etam:bmep/imepn,Tk}}
+function sweep(p){const a=[];for(let i=0;i<=44;i++)a.push(model(p,p.Nr*(.25+.9*i/44)));return a}
+function wm(){return [$('wn').value,$('wi').value,$('wc').value?'Code '+$('wc').value:'',$('wd').value].filter(Boolean).join(' | ')}
+function axis(lo,hi,n){const s=[],st=(hi-lo)/n;for(let i=0;i<=n;i++)s.push(lo+st*i);return s}
+function dynoSVG(d,sk){const W=560,H=320,L=48,Rt=48,T=26,B=36;const xs=d.map(a=>a.N),x0=xs[0],x1=xs[xs.length-1];
+ const pm=Math.max(...d.map(a=>a.hp),...(sk?sk.map(a=>a.hp):[1]))*1.1,tm=Math.max(...d.map(a=>a.tq),...(sk?sk.map(a=>a.tq):[1]))*1.1;
+ const X=v=>L+(v-x0)/(x1-x0)*(W-L-Rt),YP=v=>H-B-Math.max(0,v)/pm*(H-B-T),YT=v=>H-B-Math.max(0,v)/tm*(H-B-T);
+ const path=(a,f,Y)=>'M'+a.map(q=>X(q.N).toFixed(1)+','+Y(q[f]).toFixed(1)).join('L');
+ let g='';axis(0,1,5).forEach(t=>{const y=H-B-t*(H-B-T);g+=`<line x1="${L}" x2="${W-Rt}" y1="${y}" y2="${y}" stroke="var(--line)"/><text x="${L-5}" y="${y+4}" text-anchor="end">${Math.round(t*pm)}</text><text x="${W-Rt+5}" y="${y+4}">${Math.round(t*tm)}</text>`});
+ axis(x0,x1,5).forEach(v=>g+=`<text x="${X(v)}" y="${H-B+14}" text-anchor="middle">${Math.round(v)}</text>`);
+ let s=g+`<path d="${path(d,'hp',YP)}" fill="none" stroke="var(--p)" stroke-width="2"/><path d="${path(d,'tq',YT)}" fill="none" stroke="var(--t)" stroke-width="2"/>`;
+ if(sk)s+=`<path d="${path(sk,'hp',YP)}" fill="none" stroke="var(--p)" stroke-dasharray="5 4"/><path d="${path(sk,'tq',YT)}" fill="none" stroke="var(--t)" stroke-dasharray="5 4"/>`;
+ return `<svg viewBox="0 0 ${W} ${H}">${s}<text x="${L}" y="14" style="fill:var(--p)">hp (left)${sk?' - dashed = STOCK':''}</text><text x="${W-Rt}" y="14" text-anchor="end" style="fill:var(--t)">Nm (right)</text><text x="${(L+W-Rt)/2}" y="${H-6}" text-anchor="middle">RPM &nbsp; ${wm()}</text></svg>`}
+function pvPts(r,p,n){const a=[],V1=r.V1,Vc=r.Vc,add=(V,P)=>a.push([V*1e6,P/1e5]);
+ for(let i=0;i<=n;i++){const V=V1-(V1-Vc)*i/n;add(V,r.P1*Math.pow(V1/V,p.nc))}
+ add(Vc,r.P3);for(let i=1;i<=n;i++){const V=Vc+(V1-Vc)*i/n;add(V,r.P3*Math.pow(Vc/V,p.ne))}
+ add(V1,r.Pex);for(let i=1;i<=n;i++)add(V1-(V1-Vc)*i/n,r.Pex);add(Vc,r.Pman);for(let i=1;i<=n;i++)add(Vc+(V1-Vc)*i/n,r.Pman);return a}
+function pvSVG(r,p){const W=560,H=320,L=48,T=26,B=36,Rr=14,pts=pvPts(r,p,40),vm=r.V1*1e6*1.05,pm=r.P3/1e5*1.08;
+ const X=v=>L+v/vm*(W-L-Rr),Y=v=>H-B-v/pm*(H-B-T);let g='';
+ axis(0,1,5).forEach(t=>{const y=H-B-t*(H-B-T);g+=`<line x1="${L}" x2="${W-Rr}" y1="${y}" y2="${y}" stroke="var(--line)"/><text x="${L-5}" y="${y+4}" text-anchor="end">${(t*pm).toFixed(0)}</text>`;const x=L+t*(W-L-Rr);g+=`<line y1="${T}" y2="${H-B}" x1="${x}" x2="${x}" stroke="var(--line)"/><text x="${x}" y="${H-B+14}" text-anchor="middle">${Math.round(t*vm)}</text>`});
+ return `<svg viewBox="0 0 ${W} ${H}">${g}<path d="M${pts.map(q=>X(q[0]).toFixed(1)+','+Y(q[1]).toFixed(1)).join('L')}Z" fill="rgba(31,78,140,.12)" stroke="var(--p)" stroke-width="2"/><text x="${L}" y="14">P (bar) vs V (cm³)  at ${Math.round(r.N)} rpm</text><text x="${(L+W-Rr)/2}" y="${H-6}" text-anchor="middle">${wm()}</text></svg>`}
+function shoe(a){let s=0;for(let i=0;i<a.length;i++){const b=a[(i+1)%a.length];s+=a[i][0]*b[1]-b[0]*a[i][1]}return Math.abs(s/2)}
+const f=(v,d=2)=>isFinite(v)?v.toFixed(d):'-';
+function run(){const p=P(),N=parseFloat($('rpm').value)||p.Nr,r=model(p,N),d=sweep(p);
+ $('dyno').innerHTML=dynoSVG(d,stock);$('pv').innerHTML=pvSVG(r,p);
+ const pk=d.reduce((a,b)=>b.hp>a.hp?b:a),tk=d.reduce((a,b)=>b.tq>a.tq?b:a),rt=model(p,p.Nr);
+ $('pk').innerHTML=`Peak power <b>${f(pk.hp,0)} hp (${f(pk.kw,0)} kW)</b> at ${f(pk.N,0)} rpm. Peak torque <b>${f(tk.tq,0)} N·m</b> at ${f(tk.N,0)} rpm. Power at rated rpm: ${f(rt.hp,0)} hp`+(pubHp?`; published ${pubHp} hp (error ${f((rt.hp-pubHp)/pubHp*100,1)}%).`:'.')+(r.ex>0?` <span class="knock">Knock-limited at ${Math.round(N)} rpm (end-gas T ${f(r.T2,0)} K vs limit ${f(r.Tk,0)} K).</span>`:'');
+ const row=(a,b)=>`<tr><td>${a}</td><td>${b}</td></tr>`;
+ $('res1').innerHTML='<tr><th colspan=2>Geometry and breathing</th></tr>'+row('V<sub>d</sub> per cylinder (cm³)',f(r.Vd1*1e6,1))+row('V<sub>d,total</sub> (L)',f(r.Vdt*1e3,2))+row('V<sub>c</sub> (cm³)',f(r.Vc*1e6,1))+row('Mean piston speed (m/s)',f(r.Up,2))+row('Manifold P (bar), T (K)',f(r.Pman/1e5,3)+', '+f(r.Ti,0))+row('Air density (kg/m³)',f(r.rho,3))+row('Volumetric eff. (%)',f(r.ev*100,1))+row('Air flow (kg/s)',f(r.mdair,4))+row('Fuel flow (kg/h)',f(r.mdf*3600,1))+row('AFR',f(r.afr,1))+row('Peak cylinder P (bar)',f(r.P3/1e5,1))+row('Compression end T (K)',f(r.T2,0));
+ $('res2').innerHTML='<tr><th colspan=2>Performance and losses</th></tr>'+row('Brake power (kW / hp)',f(r.kw,1)+' / '+f(r.hp,1))+row('Brake torque (N·m)',f(r.tq,1))+row('bmep (bar)',f(r.bmep,2))+row('imep gross / net (bar)',f(r.imepg,2)+' / '+f(r.imepn,2))+row('pmep (bar)',f(r.pmep,2))+row('fmep (bar)',f(r.fmep,2))+row('Supercharger drive (bar)',f(r.scm,2))+row('Mechanical eff. bmep/imep',f(r.etam,3))+row('bsfc (g/kW·h)',f(r.bsfc,0))+row('Brake thermal eff. (%)',f(r.eb*100,1))+row('Gross indicated eff. (%)',f(r.etaG*100,1))+row('Ideal Otto eff., k=1.4 / k_hot (%)',f(r.etaO*100,1)+' / '+f(r.etaOh*100,1))+row('Ignition / knock / heat-loss factors',f(r.fi,3)+' / '+f(r.fk,3)+' / '+f(1-r.hl,3));
+ const t=pvPts(r,p,7);$('pts').innerHTML=t.map((q,i)=>`${i+1}. ${f(q[0],1)}, ${f(q[1],2)}<br>`).join('')+`<br><i>Card area check: ${f(shoe(pvPts(r,p,40))/(r.Vd1*1e6),2)} bar (equals net imep).</i>`}
+$('pre').onchange=()=>{load($('pre').value);run()};$('run').onclick=run;$('stock').onclick=()=>{stock=sweep(P());run()};$('clr').onclick=()=>{stock=null;run()};
+document.querySelectorAll('input,select').forEach(e=>e.addEventListener('change',run));
+$('wd').value=new Date().toISOString().slice(0,10);load(0);run();
+</script></body></html>
