@@ -18,7 +18,7 @@ table{border-collapse:collapse;width:100%;font-size:.84rem}td,th{border-bottom:1
 svg text{fill:var(--fg);font:11px system-ui}.knock{color:#c0392b;font-weight:600}
 </style></head><body>
 <header>
-<h1>ME 3115 Engine Bench <span style="font-weight:400;color:var(--mut)">(v2)</span></h1>
+<h1>ME 3115 Engine Simulator<span style="font-weight:400;color:var(--mut)">(v2)</span></h1>
 <div class="note"><b>RPM settings:</b> Rated RPM = your locked N_rated (it also scales the model&rsquo;s breathing and friction curves). Idle and Redline set the dyno sweep range: copy them from the simulator so the two sweeps cover the same range. &lsquo;Evaluate at&rsquo; is the single RPM used for the P-V card and the results tables: set it to f<sub>3</sub> &times; N_rated, or to the same crank RPM you read in the simulator.</div><div class="note" style="margin-top:6px">A simplified model built on the course formulas (cold-air constants, polytropic compression and expansion, constant-volume heat release, Chen&ndash;Flynn-type friction). It is <b>not a validated simulator</b>: use it to compare, tune and explain trends, and always cite your own engine data. Default boost and friction values are placeholders; replace them with cited values.</div>
 <div class="wm"><label>Name <input id="wn" size="18"></label><label>Student ID <input id="wi" size="10"></label><label>Daily code <input id="wc" size="8"></label><label>Date <input id="wd" type="date"></label></div>
 </header>
