@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asynchronous Activity: Advanced Applications of Linear & Quadratic Equations</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- KaTeX for crisp LaTeX mathematical rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+            line-height: 1.6;
+        }
+        .problem-card {
+            transition: all 0.2s ease-in-out;
+        }
+        .problem-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+            border-color: #cbd5e1;
+        }
+        /* KaTeX custom sizing tweaks */
+        .katex-display {
+            margin: 0.75em 0 !important;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 2px 0;
+        }
+        @media print {
+            .no-print { display: none !important; }
+            body { background-color: white; }
+            .shadow-xl, .shadow-sm { box-shadow: none !important; }
+        }
+    </style>
+</head>
+<body class="py-8 px-4 sm:px-6 lg:px-8">
+
+    <div class="max-w-5xl mx-auto space-y-8">
+
+        <!-- HEADER & COURSE INFO BANNER -->
+        <header class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-2xl shadow-xl overflow-hidden border border-slate-800">
+            <div class="p-6 sm:p-10">
+                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+                    <div class="space-y-2">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="inline-block bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Canvas LMS Asynchronous Activity</span>
+                            <span class="inline-block bg-slate-700/50 text-slate-300 border border-slate-600/30 text-xs font-semibold px-3 py-1 rounded-full">College Algebra / Pre-Calculus</span>
+                        </div>
+                        <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">Advanced Applications of Linear &amp; Quadratic Equations</h1>
+                        <p class="text-indigo-200 text-sm font-medium">Comprehensive Problem Set &amp; Master Strategy Guide (40 Word Problems)</p>
+                    </div>
+
+                    <!-- Submission Instruction Card -->
+                    <div class="bg-amber-500/10 border border-amber-400/30 backdrop-blur-md p-4 rounded-xl text-xs max-w-md w-full shadow-inner">
+                        <div class="flex items-center gap-2 font-bold text-amber-300 uppercase tracking-wide mb-1.5">
+                            <svg class="w-4 h-4 text-amber-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                            </svg>
+                            Submission Instructions
+                        </div>
+                        <p class="text-slate-200 leading-relaxed">
+                            Solve all 40 problems with complete, legible, step-by-step algebraic setups in your <strong class="text-white font-semibold">clean study notebook</strong>. Scan your handwritten work into a single <strong class="text-amber-200 font-semibold">PDF document</strong> and upload it to the Canvas assignment submission dropbox before the posted deadline.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- RELEVANCE TO CALCULUS CALLOUT -->
+        <section class="bg-indigo-50/80 border border-indigo-100 rounded-2xl p-6 shadow-sm">
+            <div class="flex items-start gap-4">
+                <div class="p-3 bg-indigo-600 text-white rounded-xl shrink-0 shadow-md hidden sm:block">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                    </svg>
+                </div>
+                <div class="space-y-1">
+                    <h2 class="text-base font-bold text-indigo-950 uppercase tracking-wide">Calculus &amp; Optimization Readiness</h2>
+                    <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                        Translating complex physical constraints into precise mathematical models is the cornerstone of higher mathematics. Linear rate relationships $\frac{dx}{dt}$ directly underpin <strong>Related Rates</strong> in Differential Calculus. Quadratic vertex models preview finding global extrema $f'(x) = 0$ in <strong>Optimization</strong>, while kinematic height functions $h(t) = -\frac{1}{2}gt^2 + v_0 t + h_0$ form the bedrock of <strong>Integral Kinematics</strong>. Pay careful attention to defining variable domains and rejecting non-viable roots.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONCEPTUAL GUIDE & STRATEGIES -->
+        <section class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
+            <div class="border-b border-slate-100 pb-4">
+                <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                    <span class="text-indigo-600">🧠</span> Modeling &amp; Solution Strategies
+                </h2>
+                <p class="text-sm text-slate-500 mt-1">Core mathematical frameworks, algebraic techniques, and analytical guidelines.</p>
+            </div>
+
+            <!-- Strategy Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Linear Modeling -->
+                <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-blue-600"></span> Linear Models &amp; Rate Balances
+                        </h3>
+                        <span class="text-xs font-mono bg-blue-100 text-blue-800 px-2 py-0.5 rounded">First-Order</span>
+                    </div>
+                    <ul class="text-xs text-slate-600 space-y-2 list-disc list-inside">
+                        <li><strong>Uniform Motion:</strong> $d = r \cdot t \implies t = \frac{d}{r}$. Always express total time as the sum of interval times: $t_{\text{total}} = t_1 + t_2 + \dots + t_n$.</li>
+                        <li><strong>Work-Rate Equations:</strong> If a system completes a unit job in time $T$, its rate is $r = \frac{1}{T}$. Combined rates add linearly: $\frac{1}{T_1} + \frac{1}{T_2} = \frac{1}{T_{\text{combined}}}$.</li>
+                        <li><strong>Mixture Continuity:</strong> Amount of solute remains invariant: $C_1 V_1 + C_2 V_2 = C_f (V_1 + V_2)$, where $C$ is concentration percentage and $V$ is volume.</li>
+                    </ul>
+                </div>
+
+                <!-- Quadratic Modeling -->
+                <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-indigo-600"></span> Quadratic Equations &amp; Optimization
+                        </h3>
+                        <span class="text-xs font-mono bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded">Second-Order</span>
+                    </div>
+                    <p class="text-xs text-slate-600">Standard Form: $ax^2 + bx + c = 0 \quad (a \neq 0)$</p>
+                    <ul class="text-xs text-slate-600 space-y-2 list-disc list-inside">
+                        <li><strong>Quadratic Formula:</strong> $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$</li>
+                        <li><strong>Discriminant Analysis ($\Delta = b^2 - 4ac$):</strong> If $\Delta > 0$, two real solutions exist; if $\Delta = 0$, one distinct solution; if $\Delta < 0$, solutions are non-real complex numbers.</li>
+                        <li><strong>Parabolic Vertex (Optimization):</strong> For $f(x) = ax^2 + bx + c$, the extreme value occurs at the axis of symmetry $x_v = -\frac{b}{2a}$. Maximum if $a < 0$, minimum if $a > 0$.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Pro Tips Box -->
+            <div class="p-5 rounded-xl bg-slate-900 text-slate-100 space-y-3">
+                <h3 class="text-sm font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
+                    <span>⚡</span> Critical Problem-Solving Guidelines
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-slate-300">
+                    <div>
+                        <strong class="text-white block mb-1">1. Extraneous &amp; Physical Root Rejection:</strong>
+                        Quadratic equations algebraically yield two roots. You must evaluate solutions against physical constraints (e.g., $t > 0$, $d > 0$, positive dimension quantities $x > 0$).
+                    </div>
+                    <div>
+                        <strong class="text-white block mb-1">2. Geometric &amp; Vector Relations:</strong>
+                        Perpendicular motion generates right-triangle relationships governed by $a^2 + b^2 = c^2$. Relative motion against current or wind modifies velocity: $v_{\text{eff}} = v_{\text{still}} \pm v_{\text{medium}}$.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- PART I: 20 LINEAR EQUATION WORD PROBLEMS -->
+        <section class="space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+                <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                    <span class="px-2.5 py-1 bg-blue-600 text-white rounded-lg text-xs font-bold">PART I</span>
+                    Linear Equation Applications (20 Exercises)
+                </h2>
+                <span class="text-xs text-slate-500 font-medium">First-Order Modeling &amp; Rate Systems</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                <!-- Linear 1 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">Problem 01 &bull; Dilution &amp; Mixture</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        A chemist mixes Solution $A$ ($40\%$ acid concentration) and Solution $B$ ($70\%$ acid concentration) to produce a $90\text{ L}$ solution. However, during transfer, an additional $6\text{ L}$ of pure water is accidentally introduced into the mixture. How many liters of Solution $A$ and Solution $B$ must be combined initially so that the final total liquid ($96\text{ L}$) achieves exactly a $50\%$ overall acid concentration?
+                    </p>
+                </div>
+
+                <!-- Linear 2 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">Problem 02 &bull; Multi-Segment Kinematics</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        An express train completes a $450\text{ km}$ journey in exactly $t_{\text{total}} = 5\text{ hours}$. In urban zones, it travels at an average speed of $v_1 = 60\text{ km/h}$. On open track, it accelerates to $v_2 = 110\text{ km/h}$. A signal delay forces it to crawl at $v_3 = 30\text{ km/h}$ for $30\text{ minutes}$ ($0.5\text{ h}$). Calculate the distance traveled by the train on the open track segment.
+                    </p>
+                </div>
+
+                <!-- Linear 3 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">Problem 03 &bull; Linear Age Relations</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        Four years ago, Arthur's age $A - 4$ was three times Beatrice's age $B - 4$. In eight years, twice Arthur's age $2(A + 8)$ will exceed three times Beatrice's age $3(B + 8)$ by exactly $14\text{ years}$. Determine Arthur's current age $A$.
+                    </p>
+                </div>
+
+                <!-- Linear 4 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">Problem 04 &bull; Blend Pricing &amp; Margin</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        A coffee merchant blends Arabica beans valued at $\$14/\text{lb}$ with Robusta beans at $\$8/\text{lb}$ to produce a $100\text{ lb}$ specialty batch. If the merchant sets the final retail selling price at $\$15/\text{lb}$ to realize a $25\%$ profit margin over unit production cost, how many pounds of Arabica beans are in the blend?
+                    </p>
+                </div>
+
+                <!-- Linear 5 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">Problem 05 &bull; Variable Efficiency Work</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        Master technician Alex can overhaul an engine in $6\text{ hours}$ (rate $r_A = \frac{1}{6}$). Apprentice Blake takes $10\text{ hours}$ ($r_B = \frac{1}{10}$). Alex begins alone at 8:00 AM. At 10:00 AM, Blake joins, but Alex's efficiency drops to $80\%$ ($0.8r_A$) due to instructing Blake. At what exact time will the engine overhaul be completed?
+                    </p>
+                </div>
+
+                <!-- Linear 6 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">Problem 06 &bull; Triangulation Geometry</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        In $\triangle ABC$, angle measure $\theta_2 = 3\theta_1 - 10^\circ$. The third angle satisfies $\theta_3 = (\theta_1 + \theta_2) + 20^\circ$. Utilizing the Euclidean angle sum identity $\sum \theta_i = 180^\circ$, compute the measure of the smallest angle in the triangle.
+                    </p>
+                </div>
+
+                <!-- Linear 7 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">Problem 07 &bull; Intercept Motion</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        A courier departs a facility on a motorcycle at $v_m = 45\text{ mph}$. $40\text{ minutes}$ ($t_0 = \frac{2}{3}\text{ h}$) later, a pursuit vehicle leaves the facility along the same path at $v_c = 65\text{ mph}$, but loses $10\text{ minutes}$ ($\frac{1}{6}\text{ h}$) at a checkpoint. How far from the facility does the pursuit vehicle overtake the courier?
+                    </p>
+                </div>
+
+                <!-- Linear 8 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">Problem 08 &bull; Portfolio Allocation</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        An investment fund divides $\$50,000$ across three accounts yielding simple annual interest rates of $4\%$, $6\%$, and $9\%$. The principal invested at $9\%$ is twice the principal at $4\%$. If total annual interest yield is $I = \$3,420$, calculate the principal allocated to the $6\%$ account.
+                    </p>
+                </div>
+
+                <!-- Linear 9 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">Problem 09 &bull; Positional Digit Puzzle</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        A two-digit integer $N = 10t + u$ has a tens digit $t = u + 3$. Reversing the digits yields $N_{\text{rev}} = 10u + t = N - 27$. Given that $N + N_{\text{rev}} = 121$, find the original integer $N$.
+                    </p>
+                </div>
+
+                <!-- Linear 10 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">Problem 10 &bull; Flow Rate &amp; Drainage</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        Inlet Pipe $A$ fills a reservoir in $12\text{ h}$ ($r_A = \frac{1}{12}$), Pipe $B$ fills it in $15\text{ h}$ ($r_B = \frac{1}{15}$), and Drain Pipe $C$ empties it in $20\text{ h}$ ($r_C = -\frac{1}{20}$). Pipes $A$ and $B$ operate together for $3\text{ hours}$, after which $C$ is also opened. How many additional hours are required to completely fill the reservoir?
+                    </p>
+                </div>
+
+                <!-- Linear 11 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">Problem 11 &bull; Vector Hydrodynamics</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        A boat travels $d = 48\text{ miles}$ downstream in $t_{\text{down}} = 3\text{ h}$ ($v_b + v_c = \frac{48}{3}$) and returns upstream in $t_{\text{up}} = 4\text{ h}$ ($v_b - v_c = \frac{48}{4}$). Find the current velocity $v_c$ and the time required for a unpowered raft to drift $12\text{ miles}$ powered solely by $v_c$.
+                    </p>
+                </div>
+
+                <!-- Linear 12 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">Problem 12 &bull; Geometric Invariance</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        A rectangular field has perimeter $P = 2(L + W) = 240\text{ m}$. If length is adjusted to $L' = L - 10$ and width to $W' = W + 6$, the area remains invariant ($L \cdot W = L' \cdot W'$). Determine the original dimensions $L$ and $W$.
+                    </p>
+                </div>
+
+                <!-- Linear 13 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">Problem 13 &bull; Metallurgical Alloy Fusion</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        Alloy $X$ consists of $70\%$ copper and $30\%$ zinc. Alloy $Y$ contains $40\%$ copper and $60\%$ zinc. Determine the mass of Alloy $X$ ($m_X$) and Alloy $Y$ ($m_Y$) required to formulate $150\text{ kg}$ of a new alloy containing exactly $50\%$ copper.
+                    </p>
+                </div>
+
+                <!-- Linear 14 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">Problem 14 &bull; Multi-Tier Revenue System</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        A hall sells $N = 800$ total tickets across VIP ($p_1 = \$120$), Orchestra ($p_2 = \$80$), and Balcony ($p_3 = \$45$). Revenue from Orchestra seats equals total combined revenue from VIP and Balcony seats ($80 N_2 = 120 N_1 + 45 N_3$). Given total revenue $R = \$64,000$, calculate Balcony tickets sold ($N_3$).
+                    </p>
+                </div>
+
+                <!-- Linear 15 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">Problem 15 &bull; Piecewise Wage Model</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        A consultant earns base rate $w\text{ (\$/h)}$ for the first $30\text{ hours}$ in a week, and overtime rate $1.5w$ for hours exceeding $30$. Working $44\text{ hours}$ in a week with a flat travel stipend of $\$150$, total gross pay was $\$3,370$. Solve for base rate $w$.
+                    </p>
+                </div>
+
+                <!-- Linear 16 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">Problem 16 &bull; Oscillatory Distance Integration</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        Two cyclists separated by $D = 105\text{ miles}$ travel toward each other. Cyclist $A$ rides at $v_A = 16\text{ mph}$. Cyclist $B$ departs $0.5\text{ h}$ later at $v_B = 20\text{ mph}$. At the instant $B$ departs, a bird leaves $B$ at speed $v_p = 30\text{ mph}$, flying continuously back and forth between $A$ and $B$ until they meet. Compute total distance $d_{\text{bird}}$ flown by the bird.
+                    </p>
+                </div>
+
+                <!-- Linear 17 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">Problem 17 &bull; Corporate Budget Allocation</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        An initial budget $B$ allocates $60\%$ to R&amp;D, $25\%$ to Marketing, and the remaining $\$450,000$ to Operations ($0.15B = 450,000$). Next quarter, total budget increases by $20\%$ ($B' = 1.20B$), with R&amp;D taking $65\%$ and Marketing taking $20\%$. Calculate the new dollar amount allocated to Operations ($15\%\text{ of } B'$).
+                    </p>
+                </div>
+
+                <!-- Linear 18 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">Problem 18 &bull; Consecutive Odd Integers</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        Let $x, x+2, x+4$ represent three consecutive positive odd integers. Given that four times the sum of the first and third integers exceeds five times the second integer by $33$:
+                        $$4(x + [x+4]) - 5(x+2) = 33$$
+                        Find the three integers.
+                    </p>
+                </div>
+
+                <!-- Linear 19 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">Problem 19 &bull; Per-Capita Cost Shift</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        A group of $n$ students split a total charter cost of $C = \$1,200$ equally. When $4$ students withdraw, the per-student cost increases by $\$10$:
+                        $$\frac{1200}{n - 4} - \frac{1200}{n} = 10$$
+                        Determine original group size $n$.
+                    </p>
+                </div>
+
+                <!-- Linear 20 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">Problem 20 &bull; Three-Component Concentration</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        A beverage maker combines Pure Juice ($0\%$ sugar), Nectar ($12\%$ sugar), and Concentrate ($60\%$ sugar) to formulate $500\text{ L}$ of a $18\%$ sugar mixture. If volume of Pure Juice used ($V_1$) is twice the Concentrate volume ($V_3$), calculate required Nectar volume ($V_2$).
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- PART II: 20 QUADRATIC EQUATION WORD PROBLEMS -->
+        <section class="space-y-4 pt-6">
+            <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+                <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                    <span class="px-2.5 py-1 bg-indigo-600 text-white rounded-lg text-xs font-bold">PART II</span>
+                    Quadratic Equation Applications (20 Exercises)
+                </h2>
+                <span class="text-xs text-slate-500 font-medium">Second-Order Systems, Kinematics &amp; Extrema</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                <!-- Quadratic 1 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">Problem 21 &bull; Kinematic Trajectory</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        A projectile is launched from height $h_0 = 60\text{ m}$ with initial velocity $v_0 = 28\text{ m/s}$. Height in meters above ground is modeled by:
+                        $$h(t) = -4.9t^2 + 28t + 60$$
+                        Determine the exact timestamp $t > 0$ when the projectile reaches $h(t) = 80\text{ m}$ on its downward trajectory.
+                    </p>
+                </div>
+
+                <!-- Quadratic 2 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">Problem 22 &bull; Parabolic Revenue Model</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        At base ticket price $p = \$50$, attendance is $N = 1,200$. For every $\$2$ price increase ($p(x) = 50 + 2x$), attendance drops by $30$ people ($N(x) = 1200 - 30x$). Total revenue is $R(x) = p(x) \cdot N(x)$. Find optimal price $p$ and maximum revenue $R_{\max}$.
+                    </p>
+                </div>
+
+                <!-- Quadratic 3 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">Problem 23 &bull; Right Triangle Geometry</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        In a right triangle, hypotenuse $c = x + 4$, longer leg $b = x$, and shorter leg $a = x - 4$. Applying $a^2 + b^2 = c^2$:
+                        $$(x - 4)^2 + x^2 = (x + 4)^2$$
+                        Solve for $x$ and determine all three side lengths.
+                    </p>
+                </div>
+
+                <!-- Quadratic 4 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">Problem 24 &bull; Combined Work Rational Model</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        Two pipes fill a pool in $8\text{ hours}$ together. Operating alone, the smaller pipe requires $12\text{ hours}$ longer than the larger pipe ($T_s = T_l + 12$).
+                        $$\frac{1}{T_l} + \frac{1}{T_l + 12} = \frac{1}{8}$$
+                        Solve the resulting quadratic equation for larger pipe time $T_l$.
+                    </p>
+                </div>
+
+                <!-- Quadratic 5 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">Problem 25 &bull; Non-Linear Speed Difference</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        A express train covers $d = 300\text{ miles}$ at speed $v$. A high-speed bullet train travels at $v + 15\text{ mph}$ and completes the distance in $1\text{ hour}$ less time:
+                        $$\frac{300}{v} - \frac{300}{v + 15} = 1$$
+                        Calculate standard express speed $v$.
+                    </p>
+                </div>
+
+                <!-- Quadratic 6 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">Problem 26 &bull; Uniform Border Area</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        A pool measuring $20\text{ m} \times 12\text{ m}$ is surrounded by a walkway of uniform width $x\text{ m}$. Combined total area is $A_{\text{total}} = 525\text{ m}^2$:
+                        $$(20 + 2x)(12 + 2x) = 525$$
+                        Determine border width $x$.
+                    </p>
+                </div>
+
+                <!-- Quadratic 7 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">Problem 27 &bull; Product of Even Integers</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        The product of two consecutive positive even integers $2k$ and $2k+2$ is $224$ less than $5$ times their sum:
+                        $$(2k)(2k + 2) = 5(4k + 2) - 224$$
+                        Solve for the two integers.
+                    </p>
+                </div>
+
+                <!-- Quadratic 8 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">Problem 28 &bull; Multi-Divider Boundary Optimization</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        A farmer has $160\text{ m}$ of fencing to enclose a rectangular pasture along a river (no fence along river). A dividing fence perpendicular to the river splits it into two equal sections. Total fencing $3x + y = 160 \implies y = 160 - 3x$. Maximize area $A(x) = x(160 - 3x)$.
+                    </p>
+                </div>
+
+                <!-- Quadratic 9 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">Problem 29 &bull; Diagonal Geometry</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        A rectangle has diagonal $D = 25\text{ in}$. Length $L = W + 17$. Utilizing $W^2 + (W + 17)^2 = 25^2$, calculate width $W$, length $L$, perimeter $P$, and area $A$.
+                    </p>
+                </div>
+
+                <!-- Quadratic 10 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">Problem 30 &bull; Commercial Profit &amp; Loss</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        A merchant purchases $N$ units for $\$1,800$ (cost per unit $c = \frac{1800}{N}$). $6$ damaged units are discarded. The remaining $N - 6$ units are sold at $c + 20$ each, generating total profit $\$300$ (gross receipts $\$2,100$). Solve for original quantity $N$.
+                    </p>
+                </div>
+
+                <!-- Quadratic 11 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">Problem 31 &bull; Roundtrip Current Equation</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        A vessel travels $d = 36\text{ miles}$ upstream and returns downstream along a river with current $v_c = 3\text{ mph}$. Given total roundtrip time $t_{\text{total}} = 7\text{ h}$:
+                        $$\frac{36}{v_b - 3} + \frac{36}{v_b + 3} = 7$$
+                        Calculate still-water cruising speed $v_b$.
+                    </p>
+                </div>
+
+                <!-- Quadratic 12 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">Problem 32 &bull; Sheet Fabrication Volume</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        An open box is constructed from a square metal sheet of side $x\text{ cm}$ by cutting $4\text{ cm} \times 4\text{ cm}$ corners and folding up sides. If box volume is $V = 4(x - 8)^2 = 576\text{ cm}^3$, determine initial sheet side length $x$.
+                    </p>
+                </div>
+
+                <!-- Quadratic 13 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">Problem 33 &bull; Freefall Acoustic Echo</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        A stone dropped into a canyon of depth $d$ strikes bottom at time $t_1 = \sqrt{\frac{d}{16}}$. Sound travels up at $v_s = 1100\text{ ft/s}$ taking $t_2 = \frac{d}{1100}$. Given total time $t_1 + t_2 = 5\text{ s}$:
+                        $$\sqrt{\frac{d}{16}} + \frac{d}{1100} = 5$$
+                        Transform into a quadratic in $u = \sqrt{d}$ to calculate depth $d$.
+                    </p>
+                </div>
+
+                <!-- Quadratic 14 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">Problem 34 &bull; Rational Number Relation</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        The sum of a positive real number $x$ and $4$ times its reciprocal is $\frac{25}{3}$:
+                        $$x + \frac{4}{x} = \frac{25}{3}$$
+                        Clear fractions to form $3x^2 - 25x + 12 = 0$ and solve for all valid roots $x$.
+                    </p>
+                </div>
+
+                <!-- Quadratic 15 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">Problem 35 &bull; Perpendicular Separation</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        Car $A$ travels North at velocity $v_A$. Car $B$ travels East at $v_B = v_A + 10$. After $t = 2\text{ hours}$, Euclidean distance between them is $D = 100\text{ miles}$:
+                        $$(2 v_A)^2 + (2(v_A + 10))^2 = 100^2$$
+                        Calculate speeds $v_A$ and $v_B$.
+                    </p>
+                </div>
+
+                <!-- Quadratic 16 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">Problem 36 &bull; Rental Net Profit Optimization</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        A $100$-unit complex rents fully at $\$1,500/\text{month}$. Each $\$50$ rent increase causes $2$ vacancies ($N(x) = 100 - 2x$, $p(x) = 1500 + 50x$). Each occupied unit incurs $\$100/\text{month}$ maintenance. Maximize net profit $P(x) = N(x) \cdot (p(x) - 100)$.
+                    </p>
+                </div>
+
+                <!-- Quadratic 17 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">Problem 37 &bull; Geometric Mean Altitude</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        The altitude to the hypotenuse divides it into segments $x$ and $x+7$. By the Geometric Mean Theorem, $h^2 = x(x+7)$. Given altitude $h = 12\text{ cm}$:
+                        $$x(x + 7) = 144$$
+                        Solve for $x$ and determine total hypotenuse length $c = 2x + 7$.
+                    </p>
+                </div>
+
+                <!-- Quadratic 18 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">Problem 38 &bull; Work Rate Schedule Shift</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        A construction team is contracted to lay $360\text{ m}^2$ of masonry in $D$ days. By laying $2\text{ m}^2/\text{day}$ extra ($r' = r + 2$), work completes $3$ days early ($D' = D - 3$):
+                        $$\frac{360}{r} - \frac{360}{r + 2} = 3$$
+                        Solve for original daily output rate $r$.
+                    </p>
+                </div>
+
+                <!-- Quadratic 19 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">Problem 39 &bull; Vertical Clearance Interval</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        A tennis ball height is $h(t) = -4.9t^2 + 15t + 1$. Determine if it clears a barrier of height $h = 3.5\text{ m}$, and compute the precise duration $\Delta t = t_2 - t_1$ for which $h(t) \ge 3.5\text{ m}$.
+                    </p>
+                </div>
+
+                <!-- Quadratic 20 -->
+                <div class="problem-card bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">Problem 40 &bull; Shared Equipment Lease</span>
+                    </div>
+                    <p class="text-sm text-slate-800 font-medium">
+                        A group of $n$ researchers lease a supercomputer cluster for $\$3,600/\text{month}$. Adding $3$ members reduces each member's monthly fee by $\$60$:
+                        $$\frac{3600}{n} - \frac{3600}{n + 3} = 60$$
+                        Solve for original group size $n$.
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ANSWER KEY SECTION (COLLAPSIBLE / INTERACTIVE) -->
+        <section class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm no-print">
+            <details class="group border border-amber-300 bg-amber-50/50 rounded-2xl p-4 sm:p-6 transition-all duration-200">
+                <summary class="flex flex-col sm:flex-row items-start sm:items-center justify-between cursor-pointer list-none gap-4">
+                    <div class="flex items-center gap-3">
+                        <span class="p-2 bg-amber-500 text-white rounded-xl font-bold text-sm shadow">⚠️</span>
+                        <div>
+                            <h3 class="text-base font-bold text-amber-950">
+                                Answer Key (Verification &amp; Self-Checking Only)
+                            </h3>
+                            <p class="text-xs text-amber-800 mt-0.5">
+                                Click to toggle. Final numerical values for self-assessment. Complete algebraic steps required in notebook.
+                            </p>
+                        </div>
+                    </div>
+                    <span class="bg-amber-600 group-open:bg-slate-800 text-white font-semibold text-xs px-4 py-2 rounded-xl transition duration-200 shrink-0">
+                        Toggle Answer Key
+                    </span>
+                </summary>
+
+                <!-- Grid inside details -->
+                <div class="mt-6 pt-6 border-t border-amber-200/80 space-y-6">
+                    
+                    <!-- Part I Answers -->
+                    <div>
+                        <h4 class="font-bold text-xs uppercase tracking-wider text-blue-900 mb-3">Part I: Linear Equations (1–20)</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 text-xs text-slate-800">
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-blue-600">01.</strong> $A = 36\text{ L}, B = 54\text{ L}$</div>
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-blue-600">02.</strong> $d_{\text{open}} = 341\text{ km}$</div>
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-blue-600">03.</strong> $A = 40\text{ years}$</div>
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-blue-600">04.</strong> $66.67\text{ lbs Arabica}$</div>
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-blue-600">05.</strong> $1:20\text{ PM}$</div>
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-blue-600">06.</strong> $\theta_{\min} = 22.5^\circ$</div>
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-blue-600">07.</strong> $112.5\text{ miles}$</div>
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-blue-600">08.</strong> $\$11,000\text{ at } 6\%$</div>
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-blue-600">09.</strong> $N = 74$</div>
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-blue-600">10.</strong> $5.5\text{ hours (5h 30m)}$</div>
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-blue-600">11.</strong> $v_c = 2\text{ mph; Raft } 6\text{ h}$</div>
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-blue-600">12.</strong> $L = 75\text{ m}, W = 45\text{ m}$</div>
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-blue-600">13.</strong> $m_X = 50\text{ kg}, m_Y = 100\text{ kg}$</div>
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-blue-600">14.</strong> $320\text{ Balcony}$</div>
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-blue-600">15.</strong> $w = \$63.14/\text{h}$</div>
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-blue-600">16.</strong> $d_{\text{bird}} = 80.83\text{ miles}$</div>
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-blue-600">17.</strong> $\text{Ops} = \$540,000$</div>
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-blue-600">18.</strong> $11, 13, 15$</div>
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-blue-600">19.</strong> $n = 24\text{ students}$</div>
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-blue-600">20.</strong> $V_{\text{nectar}} = 200\text{ L}$</div>
+                        </div>
+                    </div>
+
+                    <!-- Part II Answers -->
+                    <div>
+                        <h4 class="font-bold text-xs uppercase tracking-wider text-indigo-900 mb-3">Part II: Quadratic Equations (21–40)</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 text-xs text-slate-800">
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-indigo-600">21.</strong> $t = 6.35\text{ s}$</div>
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-indigo-600">22.</strong> $p = \$65; R_{\max} = \$63,375$</div>
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-indigo-600">23.</strong> $12\text{ cm}, 16\text{ cm}, 20\text{ cm}$</div>
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-indigo-600">24.</strong> $T_l = 12\text{ hours}$</div>
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-indigo-600">25.</strong> $v = 60\text{ mph}$</div>
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-indigo-600">26.</strong> $x = 2.5\text{ m}$</div>
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-indigo-600">27.</strong> $14\text{ and } 16$</div>
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-indigo-600">28.</strong> $26.67\text{m} \times 80\text{m}; A_{\max} = 2133.3\text{m}^2$</div>
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-indigo-600">29.</strong> $P = 62\text{ in}, A = 168\text{ in}^2$</div>
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-indigo-600">30.</strong> $N = 30\text{ units}$</div>
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-indigo-600">31.</strong> $v_b = 11\text{ mph}$</div>
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-indigo-600">32.</strong> $20\text{ cm} \times 20\text{ cm}$</div>
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-indigo-600">33.</strong> $d = 353.6\text{ ft}$</div>
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-indigo-600">34.</strong> $x = 8\text{ or } x = 0.5$</div>
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-indigo-600">35.</strong> $v_A = 30\text{ mph}, v_B = 40\text{ mph}$</div>
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-indigo-600">36.</strong> $p = \$2,000/\text{mo}$</div>
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-indigo-600">37.</strong> $c = 25\text{ cm}$</div>
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-indigo-600">38.</strong> $r = 14\text{ m}^2/\text{day}$</div>
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-indigo-600">39.</strong> $\text{Yes}; \Delta t = 2.70\text{ s}$</div>
+                            <div class="bg-white p-2 rounded-lg border border-amber-200"><strong class="text-indigo-600">40.</strong> $n = 12\text{ fellows}$</div>
+                        </div>
+                    </div>
+
+                </div>
+            </details>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="text-center text-xs text-slate-500 py-6">
+            <p>Advanced Mathematics Curriculum &bull; Designed for Canvas LMS Integration &bull; Formatted with KaTeX</p>
+        </footer>
+
+    </div>
+
+    <!-- KaTeX Auto-Render Initializer Script -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            if (typeof renderMathInElement === 'function') {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '$', right: '$', display: false},
+                        {left: '\\(', right: '\\)', display: false},
+                        {left: '\\[', right: '\\]', display: true}
+                    ],
+                    throwOnError: false
+                });
+            }
+        });
+    </script>
+</body>
+</html>
