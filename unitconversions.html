@@ -1,0 +1,393 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Shop Unit Conversions</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: single handbook column, sticky category bar, each quantity = converter strip + factor table */
+:root{
+  --bg:#f3f6f8; --surface:#ffffff; --fg:#17212b; --muted:#5b6874; --line:#d5dde4;
+  --accent:#1f5ea6; --accent-soft:#e2ecf7;
+  --si:#1f5ea6; --en:#9a5a12; --ot:#6b4ea0; --cancel:#c2412d;
+  --display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f151b; --surface:#151e27; --fg:#e2e8ee; --muted:#93a0ac; --line:#28343f;
+  --accent:#6fa8ea; --accent-soft:#1a2b3e; --si:#6fa8ea; --en:#e2a55c; --ot:#b59de6; --cancel:#f08a6c; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f151b; --surface:#151e27; --fg:#e2e8ee; --muted:#93a0ac; --line:#28343f;
+  --accent:#6fa8ea; --accent-soft:#1a2b3e; --si:#6fa8ea; --en:#e2a55c; --ot:#b59de6; --cancel:#f08a6c; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.5}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.top{padding-block:28px 18px}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(30px,5vw,44px);letter-spacing:.01em;margin:0;line-height:1.05;text-wrap:balance}
+.lede{color:var(--muted);max-width:65ch;margin:8px 0 0}
+.legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:14px;font-size:13px;color:var(--muted)}
+.tag{display:inline-block;font-family:var(--mono);font-size:11px;font-weight:500;padding:1px 6px;border-radius:3px;border:1px solid currentColor;letter-spacing:.04em;white-space:nowrap}
+.tag.SI{color:var(--si)}.tag.EN{color:var(--en)}.tag.OT{color:var(--ot)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-block:1px solid var(--line)}
+.bar .wrap{display:flex;gap:12px;align-items:center;padding-block:8px}
+.search{flex:0 0 200px;min-width:0}
+.search input{width:100%;font:inherit;font-size:14px;padding:6px 10px;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--fg)}
+.chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin;min-width:0;flex:1}
+.chips a{flex:none;font-family:var(--display);font-weight:600;font-size:14px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);text-decoration:none;padding:4px 9px;border-radius:3px}
+.chips a:hover,.chips a:focus-visible{color:var(--accent);background:var(--accent-soft);outline:none}
+main{padding-block:20px 60px;display:flex;flex-direction:column;gap:22px}
+.group-h{font-family:var(--display);font-weight:600;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:14px 0 -8px;border-bottom:1px solid var(--line);padding-bottom:6px}
+section.q{background:var(--surface);border:1px solid var(--line);border-radius:6px;overflow:hidden;scroll-margin-top:70px}
+.qh{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;padding:14px 16px 10px}
+.qh h2{font-family:var(--display);font-weight:700;font-size:24px;margin:0;letter-spacing:.01em}
+.qh .base{font-size:13px;color:var(--muted)}
+.qh .base b{font-family:var(--mono);font-weight:500;color:var(--fg)}
+.conv{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 16px;background:var(--accent-soft);font-size:14px}
+.conv input,.conv select{font:inherit;font-size:14px;padding:5px 8px;border:1px solid var(--line);border-radius:4px;background:var(--surface);color:var(--fg);min-width:0}
+.conv input{width:110px;font-family:var(--mono)}
+.conv select{max-width:210px}
+.conv .eq{color:var(--muted)}
+.conv output{font-family:var(--mono);font-weight:500;color:var(--accent);word-break:break-all}
+.sol{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;padding:10px 16px 12px;border-top:1px dashed var(--line);font-family:var(--mono);font-size:14px;font-variant-numeric:tabular-nums;background:color-mix(in srgb,var(--accent-soft) 45%,var(--surface))}
+.sol .lbl{font-family:var(--display);font-weight:600;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-right:4px}
+.frac{display:inline-flex;flex-direction:column;align-items:center;line-height:1.3;white-space:nowrap}
+.frac>span:first-child{border-bottom:1.5px solid var(--fg);padding:0 5px 2px}
+.frac>span:last-child{padding:2px 5px 0}
+.paren{font-size:1.9em;font-weight:300;line-height:1;color:var(--muted)}
+.term{display:inline-flex;align-items:center;gap:2px}
+.un.x{text-decoration:line-through;text-decoration-color:var(--cancel);text-decoration-thickness:2px;color:var(--muted)}
+.res{color:var(--accent);font-weight:500}
+.sol .sub{flex-basis:100%;font-size:12.5px;color:var(--muted)}
+.tbl{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{font-family:var(--display);font-weight:600;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:left;padding:8px 16px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:6px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.sym{font-family:var(--mono);font-size:13px;white-space:nowrap}
+td.num{font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.isbase td{background:color-mix(in srgb,var(--accent-soft) 55%,transparent)}
+sup{font-size:.72em;line-height:0}
+.notes{margin:0;padding:10px 16px 14px 34px;border-top:1px solid var(--line);color:var(--muted);font-size:13.5px;display:grid;gap:3px}
+.notes li{max-width:80ch}
+.notes code,.formula code{font-family:var(--mono);font-size:12.5px;color:var(--fg)}
+.formula{padding:12px 16px;display:grid;gap:6px;font-size:14px}
+.formula div{font-family:var(--mono);font-size:13.5px}
+.empty{color:var(--muted);text-align:center;padding:30px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (max-width:620px){
+  .bar .wrap{flex-direction:column;align-items:stretch;gap:6px}
+  .search{flex:none}
+  td,th{padding-left:10px;padding-right:10px}
+  .conv select{max-width:100%;flex:1 1 40%}
+}
+</style>
+
+<header class="top"><div class="wrap">
+  <h1>Unit Conversions for Mechanics, Fluids &amp; Thermo</h1>
+  <p class="lede">Multiply by the factor to convert. Each table gives 1 unit in the SI base, and 1 SI base unit in that unit, so you can go either direction. Use the strip above each table for quick conversions between any two units.</p>
+  <div class="legend">
+    <span><span class="tag SI">SI</span> metric SI</span>
+    <span><span class="tag EN">ENG</span> US customary / English</span>
+    <span><span class="tag OT">OTHER</span> CGS, gravitational metric, and special units</span>
+  </div>
+</div></header>
+
+<nav class="bar"><div class="wrap">
+  <div class="search"><input id="q" type="search" placeholder="Find a unit (psi, BTU, cSt…)" aria-label="Find a unit"></div>
+  <div class="chips" id="chips"></div>
+</div></nav>
+
+<main class="wrap" id="main"></main>
+
+<script>
+const S="SI",E="EN",O="OT";
+const SYSNAME={SI:"SI",EN:"ENG",OT:"OTHER"};
+// [name, symbol, system, factor to SI base]
+const DATA=[
+{g:"Base quantities"},
+{id:"length",t:"Length",base:"m",u:[
+ ["meter","m",S,1],["millimeter","mm",S,1e-3],["centimeter","cm",S,1e-2],["kilometer","km",S,1e3],["micrometer (micron)","µm",S,1e-6],
+ ["inch","in",E,0.0254],["foot","ft",E,0.3048],["yard","yd",E,0.9144],["mile (statute)","mi",E,1609.344],
+ ["thou / mil (0.001 in)","mil",E,2.54e-5],["tenth (0.0001 in)","tenth",E,2.54e-6],
+ ["nautical mile","nmi",O,1852],["ångström","Å",O,1e-10]],
+ n:["<code>1 in = 25.4 mm</code> exactly. <code>1 ft = 12 in</code>, <code>1 yd = 3 ft</code>, <code>1 mi = 5280 ft</code>.","<code>1 thou = 0.0254 mm</code>; <code>1 mm ≈ 39.37 thou</code>."]},
+{id:"mass",t:"Mass",base:"kg",u:[
+ ["kilogram","kg",S,1],["gram","g",S,1e-3],["metric ton (tonne)","t",S,1000],
+ ["pound-mass","lbm",E,0.45359237],["ounce (avoirdupois)","oz",E,0.028349523125],["slug","slug",E,14.593902937],
+ ["short ton (2000 lb)","ton",E,907.18474],["long ton (2240 lb)","LT",E,1016.0469088],["grain","gr",E,6.479891e-5],
+ ["metric slug (hyl, kgf·s²/m)","hyl",O,9.80665]],
+ n:["<code>1 slug = 32.174 lbm</code> — the mass accelerated 1 ft/s² by 1 lbf.","<code>1 lbm = 16 oz = 7000 grains</code>."]},
+{id:"time",t:"Time",base:"s",u:[
+ ["second","s",S,1],["millisecond","ms",S,1e-3],["microsecond","µs",S,1e-6],
+ ["minute","min",O,60],["hour","h",O,3600],["day","d",O,86400],["week","wk",O,604800],["year (365.25 d)","yr",O,31557600]]},
+{id:"temp",t:"Temperature",base:"K",temp:true},
+{id:"angle",t:"Plane angle",base:"rad",u:[
+ ["radian","rad",S,1],["degree","°",O,Math.PI/180],["arcminute","′",O,Math.PI/10800],["arcsecond","″",O,Math.PI/648000],
+ ["revolution","rev",O,2*Math.PI],["gradian","gon",O,Math.PI/200]],
+ n:["<code>360° = 2π rad = 1 rev</code>; <code>1 rad ≈ 57.2958°</code>."]},
+
+{g:"Geometry"},
+{id:"area",t:"Area",base:"m²",u:[
+ ["square meter","m²",S,1],["square millimeter","mm²",S,1e-6],["square centimeter","cm²",S,1e-4],["square kilometer","km²",S,1e6],["hectare","ha",S,1e4],
+ ["square inch","in²",E,6.4516e-4],["square foot","ft²",E,0.09290304],["square yard","yd²",E,0.83612736],["acre","ac",E,4046.8564224],["square mile","mi²",E,2589988.110336],
+ ["circular mil","cmil",E,5.067074791e-10]],
+ n:["<code>1 ft² = 144 in²</code>; <code>1 in² = 645.16 mm²</code>.","Area factors are the square of length factors."]},
+{id:"volume",t:"Volume",base:"m³",u:[
+ ["cubic meter","m³",S,1],["liter","L",S,1e-3],["milliliter","mL",S,1e-6],["cubic centimeter","cm³ (cc)",S,1e-6],["cubic millimeter","mm³",S,1e-9],
+ ["cubic inch","in³",E,1.6387064e-5],["cubic foot","ft³",E,0.028316846592],["cubic yard","yd³",E,0.764554857984],
+ ["US gallon","gal",E,3.785411784e-3],["US quart","qt",E,9.46352946e-4],["US fluid ounce","fl oz",E,2.95735295625e-5],
+ ["imperial gallon","imp gal",O,4.54609e-3],["barrel (oil, 42 gal)","bbl",O,0.158987294928]],
+ n:["<code>1 ft³ = 1728 in³ ≈ 7.4805 gal</code>; <code>1 gal = 231 in³</code>.","<code>1 L = 1000 cm³</code>; <code>1 m³ = 1000 L</code>."]},
+
+{g:"Mechanics"},
+{id:"speed",t:"Velocity",base:"m/s",u:[
+ ["meter per second","m/s",S,1],["meter per minute","m/min",S,1/60],["kilometer per hour","km/h",S,1/3.6],
+ ["foot per second","ft/s",E,0.3048],["foot per minute","ft/min",E,0.00508],["inch per second","in/s",E,0.0254],["mile per hour","mph",E,0.44704],
+ ["knot","kn",O,1852/3600]],
+ n:["<code>60 mph = 88 ft/s</code>; <code>1 m/s = 3.6 km/h</code>."]},
+{id:"angvel",t:"Angular velocity",base:"rad/s",u:[
+ ["radian per second","rad/s",S,1],["revolution per minute","rpm",O,2*Math.PI/60],["revolution per second","rps",O,2*Math.PI],["degree per second","°/s",O,Math.PI/180]],
+ n:["<code>ω [rad/s] = rpm × 2π / 60</code>. Surface speed <code>v = ω·r = π·D·N</code>."]},
+{id:"accel",t:"Acceleration",base:"m/s²",u:[
+ ["meter per second squared","m/s²",S,1],["foot per second squared","ft/s²",E,0.3048],["inch per second squared","in/s²",E,0.0254],
+ ["standard gravity","g₀",O,9.80665],["gal (cm/s²)","Gal",O,0.01]],
+ n:["<code>g₀ = 9.80665 m/s² = 32.174 ft/s²</code>."]},
+{id:"force",t:"Force",base:"N",u:[
+ ["newton","N",S,1],["kilonewton","kN",S,1e3],["meganewton","MN",S,1e6],
+ ["pound-force","lbf",E,4.4482216152605],["kip (1000 lbf)","kip",E,4448.2216152605],["ounce-force","ozf",E,0.27801385095378],["poundal","pdl",E,0.138254954376],["short ton-force","tonf",E,8896.443230521],
+ ["kilogram-force","kgf",O,9.80665],["dyne","dyn",O,1e-5]],
+ n:["<code>F = m·a / g<sub>c</sub></code>, with <code>g<sub>c</sub> = 32.174 lbm·ft/(lbf·s²)</code> in English units, 1 in SI.","1 lbm weighs 1 lbf under standard gravity; 1 kg weighs 9.81 N."]},
+{id:"torque",t:"Torque / moment",base:"N·m",u:[
+ ["newton meter","N·m",S,1],["kilonewton meter","kN·m",S,1e3],["newton millimeter","N·mm",S,1e-3],
+ ["pound-force foot","lbf·ft",E,1.3558179483314],["pound-force inch","lbf·in",E,0.112984829027616],["ounce-force inch","ozf·in",E,0.00706155181422604],["kip foot","kip·ft",E,1355.8179483314],
+ ["kilogram-force meter","kgf·m",O,9.80665],["kilogram-force centimeter","kgf·cm",O,0.0980665],["dyne centimeter","dyn·cm",O,1e-7]],
+ n:["<code>T = F × r</code>. <code>1 lbf·ft = 12 lbf·in</code>.","Torque and energy share dimensions but are not interchangeable: torque is N·m, work is J."]},
+{id:"pressure",t:"Pressure / stress",base:"Pa",u:[
+ ["pascal (N/m²)","Pa",S,1],["kilopascal","kPa",S,1e3],["megapascal (N/mm²)","MPa",S,1e6],["gigapascal","GPa",S,1e9],
+ ["pound per square inch","psi",E,6894.757293168],["kip per square inch","ksi",E,6894757.293168],["pound per square foot","psf",E,47.880258980336],
+ ["inch of mercury (32 °F)","inHg",E,3386.389],["inch of water (39.2 °F)","inH₂O",E,249.08891],["foot of water (39.2 °F)","ftH₂O",E,2988.98],
+ ["bar","bar",O,1e5],["millibar","mbar",O,100],["standard atmosphere","atm",O,101325],["millimeter of mercury","mmHg",O,133.322387415],["torr","Torr",O,101325/760],
+ ["kilogram-force per cm²","kgf/cm²",O,98066.5],["dyne per cm²","dyn/cm²",O,0.1]],
+ n:["<code>P<sub>abs</sub> = P<sub>gauge</sub> + P<sub>atm</sub></code>. Write psia / psig to make the reference clear.","<code>1 atm = 101.325 kPa = 14.696 psi = 29.92 inHg = 760 mmHg = 1.01325 bar</code>.","Hydrostatic head: <code>P = ρ·g·h</code>. For water, <code>1 ft head ≈ 0.4335 psi</code>."]},
+{id:"energy",t:"Energy / work / heat",base:"J",u:[
+ ["joule (N·m)","J",S,1],["kilojoule","kJ",S,1e3],["megajoule","MJ",S,1e6],["watt-hour","W·h",S,3600],["kilowatt-hour","kW·h",S,3.6e6],
+ ["British thermal unit (IT)","BTU",E,1055.05585262],["foot-pound-force","ft·lbf",E,1.3558179483314],["inch-pound-force","in·lbf",E,0.112984829027616],["horsepower-hour","hp·h",E,2684519.537696],["therm","thm",E,1.05505585262e8],
+ ["calorie (IT)","cal",O,4.1868],["kilocalorie (food Calorie)","kcal",O,4186.8],["erg","erg",O,1e-7],["electronvolt","eV",O,1.602176634e-19]],
+ n:["<code>1 BTU ≈ 778.17 ft·lbf ≈ 1.055 kJ</code>; <code>1 kW·h ≈ 3412.14 BTU</code>.","<code>W = F·d</code> (work), <code>Q = m·c·ΔT</code> (sensible heat)."]},
+{id:"power",t:"Power",base:"W",u:[
+ ["watt (J/s)","W",S,1],["kilowatt","kW",S,1e3],["megawatt","MW",S,1e6],
+ ["horsepower (mechanical)","hp",E,745.69987158227],["foot-pound-force per second","ft·lbf/s",E,1.3558179483314],["foot-pound-force per minute","ft·lbf/min",E,0.0225969658055],["BTU per hour","BTU/h",E,0.29307107017],["BTU per second","BTU/s",E,1055.05585262],
+ ["ton of refrigeration","TR",O,3516.8528420667],["metric horsepower (PS)","PS",O,735.49875],["kilocalorie per hour","kcal/h",O,1.163],["calorie per second","cal/s",O,4.1868]],
+ n:["<code>1 hp = 550 ft·lbf/s = 33,000 ft·lbf/min ≈ 2544.4 BTU/h ≈ 0.7457 kW</code>.","Shaft power: <code>P = T·ω</code>; <code>hp = T[lbf·ft] × rpm / 5252</code>; <code>kW = T[N·m] × rpm / 9549</code>.","<code>1 TR = 12,000 BTU/h</code>."]},
+
+{g:"Fluids"},
+{id:"density",t:"Density",base:"kg/m³",u:[
+ ["kilogram per cubic meter","kg/m³",S,1],["gram per cubic centimeter","g/cm³",S,1000],["kilogram per liter","kg/L",S,1000],
+ ["pound-mass per cubic foot","lbm/ft³",E,16.018463373960],["pound-mass per cubic inch","lbm/in³",E,27679.904710191],["slug per cubic foot","slug/ft³",E,515.378818],["pound-mass per US gallon","lbm/gal",E,119.826427316897]],
+ n:["Water near 4 °C: <code>1000 kg/m³ = 62.43 lbm/ft³ = 1.940 slug/ft³ = 8.345 lbm/gal</code>.","Specific gravity <code>SG = ρ / ρ<sub>water</sub></code>; specific weight <code>γ = ρ·g</code> (water: 9.81 kN/m³ = 62.4 lbf/ft³)."]},
+{id:"specvol",t:"Specific volume",base:"m³/kg",u:[
+ ["cubic meter per kilogram","m³/kg",S,1],["liter per kilogram","L/kg",S,1e-3],["cubic centimeter per gram","cm³/g",S,1e-3],
+ ["cubic foot per pound-mass","ft³/lbm",E,0.062427960576145],["cubic inch per pound-mass","in³/lbm",E,3.6127292e-5]],
+ n:["<code>v = 1/ρ</code>."]},
+{id:"vflow",t:"Volumetric flow rate",base:"m³/s",u:[
+ ["cubic meter per second","m³/s",S,1],["cubic meter per hour","m³/h",S,1/3600],["liter per second","L/s",S,1e-3],["liter per minute","L/min",S,1/60000],
+ ["cubic foot per second","cfs",E,0.028316846592],["cubic foot per minute","cfm",E,4.719474432e-4],["US gallon per minute","gpm",E,6.30901964e-5],["US gallon per hour","gph",E,1.05150327333e-6],["cubic inch per second","in³/s",E,1.6387064e-5],
+ ["barrel per day","bbl/d",O,1.84013072833e-6]],
+ n:["<code>Q = A·V</code> (area × average velocity).","<code>1 gpm ≈ 3.785 L/min ≈ 0.1337 cfm</code>; <code>1 cfm ≈ 28.32 L/min</code>."]},
+{id:"mflow",t:"Mass flow rate",base:"kg/s",u:[
+ ["kilogram per second","kg/s",S,1],["kilogram per minute","kg/min",S,1/60],["kilogram per hour","kg/h",S,1/3600],["tonne per hour","t/h",S,1000/3600],
+ ["pound-mass per second","lbm/s",E,0.45359237],["pound-mass per minute","lbm/min",E,0.45359237/60],["pound-mass per hour","lbm/h",E,0.45359237/3600],["slug per second","slug/s",E,14.593902937]],
+ n:["<code>ṁ = ρ·Q = ρ·A·V</code>."]},
+{id:"dynvisc",t:"Dynamic (absolute) viscosity",base:"Pa·s",u:[
+ ["pascal second (N·s/m²)","Pa·s",S,1],["millipascal second","mPa·s",S,1e-3],
+ ["pound-force second per square foot","lbf·s/ft²",E,47.880258980336],["slug per foot second","slug/(ft·s)",E,47.880258980336],["pound-mass per foot second","lbm/(ft·s)",E,1.488163943570],["pound-mass per foot hour","lbm/(ft·h)",E,4.1337887e-4],["reyn (lbf·s/in²)","reyn",E,6894.757293168],
+ ["poise (g/cm·s)","P",O,0.1],["centipoise","cP",O,1e-3]],
+ n:["<code>1 cP = 1 mPa·s</code>. Water at 20 °C ≈ 1.0 cP.","Shear stress <code>τ = μ · du/dy</code>."]},
+{id:"kinvisc",t:"Kinematic viscosity",base:"m²/s",u:[
+ ["square meter per second","m²/s",S,1],["square millimeter per second","mm²/s",S,1e-6],
+ ["square foot per second","ft²/s",E,0.09290304],["square foot per hour","ft²/h",E,2.58064e-5],["square inch per second","in²/s",E,6.4516e-4],
+ ["stokes (cm²/s)","St",O,1e-4],["centistokes","cSt",O,1e-6]],
+ n:["<code>ν = μ / ρ</code>. <code>1 cSt = 1 mm²/s</code>; water at 20 °C ≈ 1.0 cSt.","Reynolds number <code>Re = V·D / ν = ρ·V·D / μ</code> (dimensionless, same in any consistent units)."]},
+
+{g:"Thermodynamics & heat transfer"},
+{id:"specen",t:"Specific energy / enthalpy",base:"J/kg",u:[
+ ["joule per kilogram","J/kg",S,1],["kilojoule per kilogram","kJ/kg",S,1e3],
+ ["BTU per pound-mass","BTU/lbm",E,2326],["foot-pound-force per pound-mass","ft·lbf/lbm",E,2.98906692],["foot-pound-force per slug","ft·lbf/slug",E,0.09290304],
+ ["calorie per gram","cal/g",O,4186.8],["kilocalorie per kilogram","kcal/kg",O,4186.8]],
+ n:["Applies to <code>h, u, q, w</code> per unit mass. <code>1 BTU/lbm = 2.326 kJ/kg</code> exactly.","Note <code>1 m²/s² = 1 J/kg</code>, so kinetic energy <code>V²/2</code> is already in J/kg."]},
+{id:"specheat",t:"Specific heat / specific entropy / gas constant",base:"J/(kg·K)",u:[
+ ["joule per kilogram kelvin","J/(kg·K)",S,1],["kilojoule per kilogram kelvin","kJ/(kg·K)",S,1e3],
+ ["BTU per pound-mass °F (or °R)","BTU/(lbm·°F)",E,4186.8],["foot-pound-force per pound-mass °R","ft·lbf/(lbm·°R)",E,5.380320456],["foot-pound-force per slug °R","ft·lbf/(slug·°R)",E,0.167225472],
+ ["calorie per gram °C","cal/(g·°C)",O,4186.8],["kilocalorie per kilogram °C","kcal/(kg·°C)",O,4186.8]],
+ n:["Applies to <code>c<sub>p</sub>, c<sub>v</sub>, s, R</code>. Since a degree C and a kelvin are the same size, <code>kJ/(kg·°C) = kJ/(kg·K)</code>; likewise °F ↔ °R.","Water: <code>c<sub>p</sub> ≈ 4.18 kJ/(kg·K) ≈ 1.0 BTU/(lbm·°F)</code>. Air: <code>c<sub>p</sub> ≈ 1.005 kJ/(kg·K) ≈ 0.240 BTU/(lbm·°F)</code>."]},
+{id:"cond",t:"Thermal conductivity",base:"W/(m·K)",u:[
+ ["watt per meter kelvin","W/(m·K)",S,1],
+ ["BTU per hour foot °F","BTU/(h·ft·°F)",E,1.730734666],["BTU inch per hour square foot °F","BTU·in/(h·ft²·°F)",E,0.144227889],
+ ["calorie per second centimeter °C","cal/(s·cm·°C)",O,418.68],["kilocalorie per hour meter °C","kcal/(h·m·°C)",O,1.163]],
+ n:["Fourier's law: <code>q = −k·A·dT/dx</code>."]},
+{id:"htc",t:"Heat transfer coefficient",base:"W/(m²·K)",u:[
+ ["watt per square meter kelvin","W/(m²·K)",S,1],
+ ["BTU per hour square foot °F","BTU/(h·ft²·°F)",E,5.678263341],
+ ["kilocalorie per hour square meter °C","kcal/(h·m²·°C)",O,1.163],["calorie per second square centimeter °C","cal/(s·cm²·°C)",O,41868]],
+ n:["Convection: <code>q = h·A·(T<sub>s</sub> − T<sub>∞</sub>)</code>. Also used for overall U-values."]},
+{id:"flux",t:"Heat flux",base:"W/m²",u:[
+ ["watt per square meter","W/m²",S,1],["kilowatt per square meter","kW/m²",S,1e3],["watt per square centimeter","W/cm²",S,1e4],
+ ["BTU per hour square foot","BTU/(h·ft²)",E,3.154590745],
+ ["kilocalorie per hour square meter","kcal/(h·m²)",O,1.163]]}
+];
+
+const TEMP=[
+ {k:"C",name:"degree Celsius",sym:"°C",sys:S,toK:x=>x+273.15,fromK:k=>k-273.15},
+ {k:"K",name:"kelvin",sym:"K",sys:S,toK:x=>x,fromK:k=>k},
+ {k:"F",name:"degree Fahrenheit",sym:"°F",sys:E,toK:x=>(x+459.67)*5/9,fromK:k=>k*9/5-459.67},
+ {k:"R",name:"degree Rankine",sym:"°R",sys:E,toK:x=>x*5/9,fromK:k=>k*9/5}
+];
+
+function fmt(x){
+  if(!isFinite(x)) return "—";
+  if(x===0) return "0";
+  const a=Math.abs(x);
+  if(a>=1e-4 && a<1e7){
+    let s=Number(x.toPrecision(7)).toString();
+    const [i,d]=s.split(".");
+    const ig=i.replace(/\B(?=(\d{3})+(?!\d))/g,",");
+    return d?ig+"."+d:ig;
+  }
+  let [m,e]=x.toExponential(5).split("e");
+  m=m.replace(/\.?0+$/,"");
+  return m+" × 10<sup>"+parseInt(e,10)+"</sup>";
+}
+const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+
+const main=document.getElementById("main"), chips=document.getElementById("chips");
+let html="", nav="";
+DATA.forEach(q=>{
+  if(q.g){ html+=`<h3 class="group-h" data-group>${q.g}</h3>`; return; }
+  nav+=`<a href="#${q.id}">${q.t}</a>`;
+  if(q.temp){
+    const opts=TEMP.map(t=>`<option value="${t.k}">${t.sym} — ${t.name}</option>`).join("");
+    html+=`<section class="q" id="${q.id}" data-search="temperature celsius fahrenheit kelvin rankine °c °f k °r">
+    <div class="qh"><h2>Temperature</h2><span class="base">SI base <b>K</b> · offsets mean these are formulas, not single factors</span></div>
+    <div class="conv"><input id="tv" type="number" value="68" step="any" aria-label="Value"><select id="tf" aria-label="From">${opts}</select><span class="eq">→</span><select id="tt" aria-label="To">${opts}</select><span class="eq">=</span><output id="to"></output></div>
+    <div class="sol" id="ts" aria-live="polite"></div>
+    <div class="formula">
+      <div>°C = (°F − 32) × 5/9</div><div>°F = °C × 9/5 + 32</div>
+      <div>K  = °C + 273.15</div><div>°R = °F + 459.67</div>
+      <div>K  = °R × 5/9 &nbsp;&nbsp; °R = K × 9/5</div>
+    </div>
+    <ul class="notes">
+      <li>Temperature <em>differences</em> have no offset: <code>ΔT of 1 K = 1 °C = 1.8 °F = 1.8 °R</code>.</li>
+      <li>Use absolute temperatures (K or °R) in the ideal gas law, efficiencies and radiation.</li>
+      <li>Reference points: water freezes at <code>0 °C = 32 °F = 273.15 K = 491.67 °R</code>, boils (1 atm) at <code>100 °C = 212 °F</code>; <code>−40 °C = −40 °F</code>.</li>
+    </ul></section>`;
+    return;
+  }
+  const rows=q.u.map(([name,sym,sys,f])=>`<tr class="${f===1?"isbase":""}" data-s="${esc((name+" "+sym).toLowerCase())}">
+    <td>${esc(name)}</td><td class="sym">${esc(sym)}</td><td><span class="tag ${sys}">${SYSNAME[sys]}</span></td>
+    <td class="num">${fmt(f)} ${esc(q.base)}</td><td class="num">${fmt(1/f)} ${esc(sym)}</td></tr>`).join("");
+  const opts=q.u.map(([name,sym],i)=>`<option value="${i}">${esc(sym)} — ${esc(name)}</option>`).join("");
+  const notes=q.n?`<ul class="notes">${q.n.map(x=>`<li>${x}</li>`).join("")}</ul>`:"";
+  html+=`<section class="q" id="${q.id}" data-search="${esc(q.t.toLowerCase())}">
+   <div class="qh"><h2>${q.t}</h2><span class="base">SI unit <b>${esc(q.base)}</b></span></div>
+   <div class="conv" data-q="${q.id}"><input id="v-${q.id}" type="number" value="1" step="any" aria-label="Value"><select id="f-${q.id}" aria-label="From">${opts}</select><span class="eq">→</span><select id="t-${q.id}" aria-label="To">${opts}</select><span class="eq">=</span><output id="o-${q.id}"></output></div>
+   <div class="sol" id="s-${q.id}" aria-live="polite"></div>
+   <div class="tbl"><table><thead><tr><th>Unit</th><th>Symbol</th><th>System</th><th>1 unit =</th><th>1 ${esc(q.base)} =</th></tr></thead><tbody>${rows}</tbody></table></div>
+   ${notes}</section>`;
+});
+
+html+=`<h3 class="group-h" data-group>Reference</h3>
+<section class="q" id="constants" data-search="constants gravity atmosphere gas constant water stefan">
+ <div class="qh"><h2>Useful constants</h2></div>
+ <div class="tbl"><table><thead><tr><th>Constant</th><th>SI</th><th>English</th></tr></thead><tbody>
+ <tr><td>Standard gravity, g₀</td><td class="num">9.80665 m/s²</td><td class="num">32.174 ft/s²</td></tr>
+ <tr><td>Gravitational conversion, g<sub>c</sub></td><td class="num">1 kg·m/(N·s²)</td><td class="num">32.174 lbm·ft/(lbf·s²)</td></tr>
+ <tr><td>Standard atmosphere</td><td class="num">101.325 kPa</td><td class="num">14.696 psia</td></tr>
+ <tr><td>Universal gas constant, R<sub>u</sub></td><td class="num">8.31446 kJ/(kmol·K)</td><td class="num">1545.35 ft·lbf/(lbmol·°R) = 1.9859 BTU/(lbmol·°R)</td></tr>
+ <tr><td>Gas constant for air, R</td><td class="num">0.2870 kJ/(kg·K)</td><td class="num">53.35 ft·lbf/(lbm·°R) = 0.06855 BTU/(lbm·°R)</td></tr>
+ <tr><td>Density of water (4 °C)</td><td class="num">1000 kg/m³</td><td class="num">62.43 lbm/ft³</td></tr>
+ <tr><td>Specific weight of water</td><td class="num">9.807 kN/m³</td><td class="num">62.4 lbf/ft³</td></tr>
+ <tr><td>Stefan–Boltzmann, σ</td><td class="num">5.670 × 10<sup>−8</sup> W/(m²·K⁴)</td><td class="num">0.1714 × 10<sup>−8</sup> BTU/(h·ft²·°R⁴)</td></tr>
+ <tr><td>Mechanical equivalent of heat</td><td class="num">4.1868 J/cal</td><td class="num">778.17 ft·lbf/BTU</td></tr>
+ </tbody></table></div></section>
+<section class="q" id="prefixes" data-search="prefix prefixes kilo mega milli micro nano giga">
+ <div class="qh"><h2>SI prefixes</h2></div>
+ <div class="tbl"><table><thead><tr><th>Prefix</th><th>Symbol</th><th>Factor</th><th>Prefix</th><th>Symbol</th><th>Factor</th></tr></thead><tbody>
+ <tr><td>tera</td><td class="sym">T</td><td class="num">10<sup>12</sup></td><td>deci</td><td class="sym">d</td><td class="num">10<sup>−1</sup></td></tr>
+ <tr><td>giga</td><td class="sym">G</td><td class="num">10<sup>9</sup></td><td>centi</td><td class="sym">c</td><td class="num">10<sup>−2</sup></td></tr>
+ <tr><td>mega</td><td class="sym">M</td><td class="num">10<sup>6</sup></td><td>milli</td><td class="sym">m</td><td class="num">10<sup>−3</sup></td></tr>
+ <tr><td>kilo</td><td class="sym">k</td><td class="num">10<sup>3</sup></td><td>micro</td><td class="sym">µ</td><td class="num">10<sup>−6</sup></td></tr>
+ <tr><td>hecto</td><td class="sym">h</td><td class="num">10<sup>2</sup></td><td>nano</td><td class="sym">n</td><td class="num">10<sup>−9</sup></td></tr>
+ <tr><td>deka</td><td class="sym">da</td><td class="num">10<sup>1</sup></td><td>pico</td><td class="sym">p</td><td class="num">10<sup>−12</sup></td></tr>
+ </tbody></table></div></section>
+<p class="empty" id="empty" hidden>No units match that search.</p>`;
+main.innerHTML=html;
+chips.innerHTML=nav+`<a href="#constants">Constants</a><a href="#prefixes">Prefixes</a>`;
+
+// ---- worked solutions with unit cancellation ----
+const un=(s,x)=>`<span class="un${x?" x":""}">${esc(s)}</span>`;
+const sig=x=>Number(Math.abs(x).toPrecision(7)).toExponential().split("e")[0].replace(".","").length;
+// conversion factor as a fraction, where 1 [from] = f [to]; [from] sits in the denominator and cancels
+function factor(f,from,to,cancelTo){
+  const useDirect = sig(f)<sig(1/f) || (sig(f)===sig(1/f) && f>=1);
+  const num = useDirect ? fmt(f)+" "+un(to,cancelTo) : "1 "+un(to,cancelTo);
+  const den = useDirect ? "1 "+un(from,true) : fmt(1/f)+" "+un(from,true);
+  return `<span class="term"><span class="paren">(</span><span class="frac"><span>${num}</span><span>${den}</span></span><span class="paren">)</span></span>`;
+}
+const LBL=`<span class="lbl">Solution</span>`;
+function solution(x,A,B,base){
+  const [, sa, , fa]=A, [, sb, , fb]=B, r=x*fa/fb;
+  const start=`<span>${fmt(x)} ${un(sa,A!==B)}</span>`, eq=`<span>=</span><span class="res">${fmt(r)} ${esc(sb)}</span>`;
+  if(A===B) return `${LBL}${start}${eq}<span class="sub">Same unit, so no conversion is needed.</span>`;
+  if(fa===1) return `${LBL}${start}<span>×</span>${factor(1/fb,base,sb,false)}${eq}`;
+  if(fb===1) return `${LBL}${start}<span>×</span>${factor(fa,sa,base,false)}${eq}`;
+  return `${LBL}${start}<span>×</span>${factor(fa,sa,base,true)}<span>×</span>${factor(1/fb,base,sb,false)}${eq}
+    <span class="sub">Converted through the SI unit (${esc(base)}). Combined factor: 1 ${esc(sa)} = ${fmt(fa/fb)} ${esc(sb)}</span>`;
+}
+
+// converters
+DATA.filter(q=>q.u).forEach(q=>{
+  const v=document.getElementById("v-"+q.id), f=document.getElementById("f-"+q.id), t=document.getElementById("t-"+q.id), o=document.getElementById("o-"+q.id), s=document.getElementById("s-"+q.id);
+  // sensible default: first English unit -> SI base
+  const en=q.u.findIndex(u=>u[2]===E); f.value=String(en>=0?en:1); t.value="0";
+  const run=()=>{const x=parseFloat(v.value); const uf=q.u[+f.value], ut=q.u[+t.value];
+    if(isNaN(x)){o.innerHTML="—"; s.innerHTML=`${LBL}<span>Enter a number to see the steps.</span>`; return;}
+    o.innerHTML=fmt(x*uf[3]/ut[3])+" "+esc(ut[1]);
+    s.innerHTML=solution(x,uf,ut,q.base);};
+  [v,f,t].forEach(el=>el.addEventListener("input",run)); run();
+});
+
+// temperature: offsets, so show the formula with the value substituted
+const TF={
+ "C>F":["X × 9/5 + 32"],"F>C":["(X − 32) × 5/9"],"C>K":["X + 273.15"],"K>C":["X − 273.15"],
+ "F>R":["X + 459.67"],"R>F":["X − 459.67"],"K>R":["X × 9/5"],"R>K":["X × 5/9"],
+ "C>R":["(X + 273.15) × 9/5"],"R>C":["X × 5/9 − 273.15"],"F>K":["(X + 459.67) × 5/9"],"K>F":["X × 9/5 − 459.67"]
+};
+(()=>{const v=document.getElementById("tv"),f=document.getElementById("tf"),t=document.getElementById("tt"),o=document.getElementById("to"),s=document.getElementById("ts");
+  f.value="F"; t.value="C";
+  const run=()=>{const x=parseFloat(v.value);const a=TEMP.find(u=>u.k===f.value),b=TEMP.find(u=>u.k===t.value);
+    if(isNaN(x)){o.textContent="—"; s.innerHTML=`${LBL}<span>Enter a number to see the steps.</span>`; return;}
+    const r=Number(b.fromK(a.toK(x)).toPrecision(7)).toString();
+    o.textContent=r+" "+b.sym;
+    if(a===b){s.innerHTML=`${LBL}<span>${x} ${a.sym} = <span class="res">${r} ${b.sym}</span></span>`;return;}
+    const xs=(x<0?"("+x+")":String(x))+" "+a.sym;
+    const expr=TF[a.k+">"+b.k][0].replace("X",xs);
+    s.innerHTML=`${LBL}<span>${b.sym} = ${expr}</span><span>=</span><span class="res">${r} ${b.sym}</span>
+      <span class="sub">Temperature scales have offsets, so use the formula instead of a single multiplying factor.</span>`;};
+  [v,f,t].forEach(el=>el.addEventListener("input",run)); run();})();
+
+// search
+document.getElementById("q").addEventListener("input",e=>{
+  const s=e.target.value.trim().toLowerCase(); let any=false;
+  document.querySelectorAll("section.q").forEach(sec=>{
+    const rows=sec.querySelectorAll("tbody tr[data-s]");
+    const secHit=!s||sec.dataset.search.includes(s);
+    let rowHit=false;
+    rows.forEach(r=>{const m=!s||secHit||r.dataset.s.includes(s); r.hidden=!m; if(m&&s&&!secHit) rowHit=true;});
+    const show=secHit||rowHit; sec.hidden=!show; if(show) any=true;
+  });
+  document.querySelectorAll("[data-group]").forEach(h=>h.hidden=!!s);
+  document.getElementById("empty").hidden=any;
+});
+</script>
+
+</body></html>
